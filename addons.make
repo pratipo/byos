@@ -1,0 +1,5 @@
+ofxPCL
+ofxKinect
+ofxGui
+ofxXmlSettings
+ofxThread
