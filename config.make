@@ -10,15 +10,14 @@ OF_ROOT = ../../..
 # for example search paths like:
 # USER_CFLAGS = -I src/objects
 
-USER_CFLAGS = 
+USER_CFLAGS = $(shell pkg-config pcl_common-1.6 pcl_kdtree-1.6 pcl_search-1.6 pcl_features-1.6 pcl_io-1.6 --cflags)
 
 
 # USER_LDFLAGS allows to pass custom flags to the linker
 # for example libraries like:
 # USER_LDFLAGS = libs/libawesomelib.a
 
-USER_LDFLAGS =
-
+USER_LDFLAGS = -lusb-1.0 -lpcl_surface -lpcl_registration -lpcl_sample_consensus -lpcl_features -lm -lpcl_kdtree -lpcl_filters -lpcl_search -lflann_cpp -lpcl_common -lpcl_io -lOpenNI -lpcl_octree -lpcl_segmentation
 
 EXCLUDE_FROM_SOURCE="bin,.xcodeproj,obj"
 
@@ -28,9 +27,9 @@ USER_COMPILER_OPTIMIZATION = -march=native -mtune=native -Os
 
 
 # android specific, in case you want to use different optimizations
-USER_LIBS_ARM = 
-USER_LIBS_ARM7 = 
-USER_LIBS_NEON = 
+USER_LIBS_ARM =
+USER_LIBS_ARM7 =
+USER_LIBS_NEON =
 
 # android optimizations
 

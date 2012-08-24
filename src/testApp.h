@@ -1,6 +1,9 @@
 #pragma once
 
 #include "ofMain.h"
+#include "ofxGui.h"
+#include "ofxKinect.h"
+#include "ofxPCL.h"
 
 class testApp : public ofBaseApp{
 
@@ -18,5 +21,12 @@ class testApp : public ofBaseApp{
 		void windowResized(int w, int h);
 		void dragEvent(ofDragInfo dragInfo);
 		void gotMessage(ofMessage msg);
-		
+
+		void meshCloud();
+
+		ofEasyCam camera;
+		ofxKinect kinect1, kinect2, kienct3;
+		ofMesh mesh;
+
+		ofxPanel gui;
 };
