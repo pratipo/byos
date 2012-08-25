@@ -1,9 +1,16 @@
 #pragma once
 
+/*
+#include <time.h>
+#include <vector>
+#include <string>
+*/
+
 #include "ofMain.h"
 #include "ofxGui.h"
 #include "ofxKinect.h"
 #include "ofxPCL.h"
+#include "ofxVectorMath.h"
 
 class testApp : public ofBaseApp{
 
@@ -22,9 +29,14 @@ class testApp : public ofBaseApp{
 		void dragEvent(ofDragInfo dragInfo);
 		void gotMessage(ofMessage msg);
 
+        void updateCamera();
+
+        void drawOrigin();
 		void meshCloud();
 
-		ofEasyCam camera;
+		ofCamera camera;
+		ofxVec3f cam_location;
+
 		ofxKinect kinect1, kinect2, kienct3;
 		ofMesh mesh;
 

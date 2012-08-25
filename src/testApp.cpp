@@ -29,43 +29,103 @@ void testApp::meshCloud(){
 	}
 }
 
+void testApp::updateCamera(){
+
+    float distance = 3000;
+    float speed = 20.0;
+
+    cam_location = ofxVec3f(    sin(2.0*PI*ofGetElapsedTimef()/speed)*distance,
+                                cos(2.0*PI*ofGetElapsedTimef()/speed)*distance,
+                                1000); //cos(2.0*PI*ofGetElapsedTimef())*distance);
+
+//    if (autoRotate){
+//        eyeVector = eyeVectorDisplay; //* ofxVec3f(   sin(2.0*PI*second/20.0)*distance,
+//                                //* 0.0,
+//                                //* cos(2.0*PI*second/20.0)*distance    );
+//    }
+//    else{
+//        eyeVector = ofxVec3f(   sin(4.0*PI*mouseX/ofGetWidth())*cos(1.0*PI*mouseY/ofGetHeight() - PI/2.0) *distance,
+//                                sin(1.0*PI*mouseY/ofGetHeight() - PI/2.0)*distance,
+//                                cos(4.0*PI*mouseX/ofGetWidth())*cos(1.0*PI*mouseY/ofGetHeight() - PI/2.0) *distance     );
+//    }
+
+    camera.resetTransform();
+    camera.setPosition(cam_location);
+    camera.lookAt(ofVec3f(0,0,1000), ofVec3f(0,0,1));
+
+}
+
 //--------------------------------------------------------------
 void testApp::update(){
+
+    updateCamera();
+
     kinect1.update();
 
     if(kinect1.isFrameNew()){
 		meshCloud();
 	}
 
-    camera.resetTransform();
-    camera.truck(mouseX-ofGetWidth()*.5);
-    camera.boom(mouseY-ofGetHeight()*.5);
+    //camera.resetTransform();
+    //camera.truck(mouseX-ofGetWidth()*.5);
+}
 
+void testApp::drawOrigin(){
+
+    ofPushStyle();
+
+    ofNoFill();
+
+    ofDrawAxis(200);
+
+    ofSetColor(ofColor(255, 255, 255));
+    ofSetCircleResolution(6);
+    ofCircle(0,0,250);
+
+    /// TODO draw vertices according to corrected kinect position
+    ofSetCircleResolution(3);
+    ofCircle(0,0,2100);
+
+    ofPopStyle();
 }
 
 //--------------------------------------------------------------
 void testApp::draw(){
     ofSetColor(255);
-    ofDrawBitmapString(ofToString(ofGetFrameRate()),2,10);
 
-	kinect1.drawDepth(2,20,640/4,480/4);
+    ofDrawBitmapString(ofToString(ofGetFrameRate()),2,10);
+    ofDrawBitmapString(ofToString(ofGetElapsedTimef()),2,20);
+
+	kinect1.drawDepth(2,40,640/4,480/4);
+
 
     glEnable(GL_DEPTH_TEST);
 	camera.begin();
-        ofScale(1,-1,-1);
-        ofSetColor(255,255,255,200);
 
-        glEnable(GL_DEPTH_TEST);
-        mesh.drawVertices();
-        glDisable(GL_DEPTH_TEST);
+        drawOrigin();
 
-        camera.end();
+        ofPushMatrix();
+
+            ofScale(1,1,1);
+            // ofRotate()
+            ofSetColor(255,255,255,200);
+
+            glEnable(GL_DEPTH_TEST);
+            mesh.drawVertices();
+            glDisable(GL_DEPTH_TEST);
+
+        ofPopMatrix();
+    camera.end();
 	glDisable(GL_DEPTH_TEST);
 
 }
 
 //--------------------------------------------------------------
 void testApp::keyPressed(int key){
+
+    if(key=='s'){
+    	mesh.save(ofGetTimestampString()+".ply");
+    }
 
 }
 

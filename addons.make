@@ -3,3 +3,4 @@ ofxKinect
 ofxGui
 ofxXmlSettings
 ofxThread
+ofxVectorMath
