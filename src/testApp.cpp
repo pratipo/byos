@@ -9,13 +9,8 @@ void testApp::setUpKinects(){
 
 void testApp::setUpKinectClouds(){
 
-    float distance = 2100;
-
     for(int i = 0; i<nK; i++){
         kinectClouds[i].init(i, &kinects[i]);
-        kinectClouds[i].setPosition(    distance * cos(TWO_PI*(float)i/nK),
-                                        distance * sin(TWO_PI*(float)i/nK),
-                                        0);
     }
 }
 
@@ -30,30 +25,35 @@ void testApp::setup(){
 
     kserials[0] = "A00364911617035A"; //, "x", "y"};
     kColors[0] = ofColor(255,0,0); kColors[1] = ofColor(0,255,0); kColors[2] = ofColor(255,255,0);
-    setUpKinects();
-    setUpKinectClouds();
+    kHeights[0] = kHeights[1] = kHeights[2] = 740;
+
+    triangle_radius = 2100;
 
     ofBackground(0);
     ofEnableAlphaBlending();
-    mesh.setMode(OF_PRIMITIVE_POINTS);
+
+    cam_distance = 3000;
+    camera.setFarClip(10000);
+
+    setUpKinects();
+    setUpKinectClouds();
 }
 
 //--------------------------------------------------------------
 
 void testApp::updateCamera(){
 
-    float distance = 3000;
     float speed = 20.0;
 
     if (autorotation){
-        cam_location = ofxVec3f(    sin(TWO_PI*ofGetElapsedTimef()/speed) * distance,
-                                    cos(TWO_PI*ofGetElapsedTimef()/speed) * distance,
+        cam_location = ofxVec3f(    sin(TWO_PI*ofGetElapsedTimef()/speed) * cam_distance,
+                                    cos(TWO_PI*ofGetElapsedTimef()/speed) * cam_distance,
                                     1000); // z elevation
     }
     else{
-        cam_location = ofxVec3f(    sin(4.0*PI*mouseX/ofGetWidth())*cos(1.0*PI*mouseY/ofGetHeight() - PI/2.0) * distance,
-                                    cos(4.0*PI*mouseX/ofGetWidth())*cos(1.0*PI*mouseY/ofGetHeight() - PI/2.0) * distance,
-                                    sin(1.0*PI*mouseY/ofGetHeight() - PI/2.0) * distance); // z elevation
+        cam_location = ofxVec3f(    sin(4.0*PI*mouseX/ofGetWidth())*cos(1.0*PI*mouseY/ofGetHeight() - PI/2.0) * cam_distance,
+                                    cos(4.0*PI*mouseX/ofGetWidth())*cos(1.0*PI*mouseY/ofGetHeight() - PI/2.0) * cam_distance,
+                                    sin(1.0*PI*mouseY/ofGetHeight() - PI/2.0) * cam_distance); // z elevation
     }
 
     camera.resetTransform();
@@ -61,18 +61,7 @@ void testApp::updateCamera(){
     camera.lookAt(ofVec3f(0,0,1000), ofVec3f(0,0,1));
 }
 
-void testApp::updateKinectClouds(){
-
-    int i = 0;
-    //for(int i = 0; i<nK; i++){
-
-        //kinectClouds[i].setRotation(    0,                                         0,                                        0);
-    //}
-}
-
-void testApp::update(){
-
-    updateCamera();
+void testApp::updateKinects(){
 
     int i = 0;
     //for (int i=0; i<nK; i++){
@@ -82,6 +71,21 @@ void testApp::update(){
             kinectClouds[i].meshCloud();
         }
     //}
+}
+
+void testApp::updateKinectClouds(){
+
+    for(int i = 0; i<nK; i++){
+        kinectClouds[i].update();
+    }
+}
+
+void testApp::update(){
+
+    updateCamera();
+
+    updateKinects();
+
 	updateKinectClouds();
 }
 
@@ -125,12 +129,10 @@ void testApp::draw(){
 
 	kinects[0].drawDepth(2,40,640/4,480/4);
 
-
     glEnable(GL_DEPTH_TEST);
 	camera.begin();
 
         drawOrigin();
-
 
         glEnable(GL_DEPTH_TEST);
         drawKinectClouds();
@@ -150,6 +152,13 @@ void testApp::keyPressed(int key){
             break;
         case 'r':
             autorotation = !autorotation;
+            break;
+
+        case '+':
+            cam_distance += 100;
+            break;
+        case '-':
+            cam_distance -= 100;
             break;
     }
 

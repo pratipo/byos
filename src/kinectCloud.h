@@ -9,6 +9,8 @@
 #include "ofxXmlSettings.h"
 #include "ofxKinect.h"
 
+#define nK 3
+
 class kinectCloud : public ofNode{
 
     public:
@@ -17,7 +19,7 @@ class kinectCloud : public ofNode{
         ///size
         int                     w;
         int                     h;
-        int                     cloudRes;
+        int                     step; // brute force downsampling factor
 
         ofxKinect*              kinect;
         ofMesh                  mesh;
@@ -30,12 +32,21 @@ class kinectCloud : public ofNode{
         float                   zClip;
         float                   ZClip;
 
+        float                   posX;
+        float                   posY;
+        float                   posZ;
+
+        float                   rotX;
+        float                   rotY;
+        float                   rotZ;
+
         /// METHODS
         kinectCloud();
 
         void init(int i, ofxKinect* k);
 
         void meshCloud();
+        void update();
 
         virtual void customDraw();
 
