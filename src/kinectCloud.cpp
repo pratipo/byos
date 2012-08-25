@@ -3,10 +3,13 @@
 kinectCloud::kinectCloud()
 {}
 
-void kinectCloud::init(int i, int res=1)
+void kinectCloud::init(int i, ofxKinect* k)
 {
     id = i;
-    cloudRes = res;
+
+    kinect = k;
+
+    cloudRes = 1;
     w = 640/cloudRes;
     h = 480/cloudRes;
 
@@ -25,9 +28,26 @@ void kinectCloud::init(int i, int res=1)
     ZClip = 2.5;
 }
 
+void kinectCloud::meshCloud(){
+	mesh.clear();
+
+	int w = 640;
+	int h = 480;
+
+	int step = 2;
+	for(int y = 0; y < h; y += step) {
+		for(int x = 0; x < w; x += step) {
+			if(kinect->getDistanceAt(x, y) > 0) {
+				mesh.addVertex(kinect->getWorldCoordinateAt(x, y));
+			}
+		}
+	}
+}
+
 void kinectCloud::customDraw()
 {
-    ofSphere(0,0,0,700); ofDrawAxis(500);
+    ofDrawAxis(500);
+    mesh.drawVertices();
 }
 
 //--------------------------------------------------------------

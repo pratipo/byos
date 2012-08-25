@@ -19,6 +19,7 @@ class kinectCloud : public ofNode{
         int                     h;
         int                     cloudRes;
 
+        ofxKinect*              kinect;
         ofMesh                  mesh;
         ofxMatrix4x4            model;
 
@@ -32,7 +33,9 @@ class kinectCloud : public ofNode{
         /// METHODS
         kinectCloud();
 
-        void init(int i, int res);
+        void init(int i, ofxKinect* k);
+
+        void meshCloud();
 
         virtual void customDraw();
 

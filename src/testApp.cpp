@@ -9,12 +9,17 @@ void testApp::setUpKinects(){
 
 void testApp::setUpKinectClouds(){
 
-    int i = 0;
-    kinectClouds[i].init(0, 1);
+    float distance = 2100;
 
+    for(int i = 0; i<nK; i++){
+        kinectClouds[i].init(i, &kinects[i]);
+        kinectClouds[i].setPosition(    distance * cos(TWO_PI*(float)i/nK),
+                                        distance * sin(TWO_PI*(float)i/nK),
+                                        0);
+    }
 }
 
-//--------------------------------------------------------------
+
 void testApp::setup(){
     ofSetLogLevel(OF_LOG_VERBOSE);
 
@@ -24,6 +29,7 @@ void testApp::setup(){
 	gui.add(autorotation.set("auto rotation",false));
 
     kserials[0] = "A00364911617035A"; //, "x", "y"};
+    kColors[0] = ofColor(255,0,0); kColors[1] = ofColor(0,255,0); kColors[2] = ofColor(255,255,0);
     setUpKinects();
     setUpKinectClouds();
 
@@ -32,22 +38,7 @@ void testApp::setup(){
     mesh.setMode(OF_PRIMITIVE_POINTS);
 }
 
-// MyCustom3DNode*node=newMyCustom3DNode(); node->setPosition( cos((float)i/10*TWO_PI)*r ,sin((float)i/10*TWO_PI)*r ,-5 );
-
-void testApp::meshCloud(){
-	mesh.clear();
-	int w = 640;
-	int h = 480;
-
-	int step = 2;
-	for(int y = 0; y < h; y += step) {
-		for(int x = 0; x < w; x += step) {
-			if(kinects[0].getDistanceAt(x, y) > 0) {
-				mesh.addVertex(kinects[0].getWorldCoordinateAt(x, y));
-			}
-		}
-	}
-}
+//--------------------------------------------------------------
 
 void testApp::updateCamera(){
 
@@ -55,8 +46,8 @@ void testApp::updateCamera(){
     float speed = 20.0;
 
     if (autorotation){
-        cam_location = ofxVec3f(    sin(2.0*PI*ofGetElapsedTimef()/speed) * distance,
-                                    cos(2.0*PI*ofGetElapsedTimef()/speed) * distance,
+        cam_location = ofxVec3f(    sin(TWO_PI*ofGetElapsedTimef()/speed) * distance,
+                                    cos(TWO_PI*ofGetElapsedTimef()/speed) * distance,
                                     1000); // z elevation
     }
     else{
@@ -70,16 +61,38 @@ void testApp::updateCamera(){
     camera.lookAt(ofVec3f(0,0,1000), ofVec3f(0,0,1));
 }
 
-//--------------------------------------------------------------
+void testApp::updateKinectClouds(){
+
+    int i = 0;
+    //for(int i = 0; i<nK; i++){
+
+        //kinectClouds[i].setRotation(    0,                                         0,                                        0);
+    //}
+}
+
 void testApp::update(){
 
     updateCamera();
 
-    kinects[0].update();
+    int i = 0;
+    //for (int i=0; i<nK; i++){
+        kinects[i].update();
 
-    if(kinects[0].isFrameNew()){
-		meshCloud();
-	}
+        if(kinects[i].isFrameNew()){
+            kinectClouds[i].meshCloud();
+        }
+    //}
+	updateKinectClouds();
+}
+
+//--------------------------------------------------------------
+
+void testApp::drawKinectClouds(){
+
+    for(int i = 0; i<nK; i++){
+        ofSetColor(kColors[i]);
+        kinectClouds[i].draw();
+    }
 }
 
 void testApp::drawOrigin(){
@@ -118,17 +131,11 @@ void testApp::draw(){
 
         drawOrigin();
 
-        ofPushMatrix();
 
-            ofScale(1,1,1);
-            // ofRotate()
-            ofSetColor(255,255,255,200);
+        glEnable(GL_DEPTH_TEST);
+        drawKinectClouds();
+        glDisable(GL_DEPTH_TEST);
 
-            glEnable(GL_DEPTH_TEST);
-            mesh.drawVertices();
-            glDisable(GL_DEPTH_TEST);
-
-        ofPopMatrix();
     camera.end();
 	glDisable(GL_DEPTH_TEST);
 

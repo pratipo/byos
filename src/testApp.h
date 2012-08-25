@@ -14,6 +14,8 @@
 
 #include "kinectCloud.h"
 
+#define nK 3
+
 class testApp : public ofBaseApp{
 
 	public:
@@ -39,6 +41,7 @@ class testApp : public ofBaseApp{
 
         //------------------------------------
         string kserials[3];
+        ofColor kColors[3];
 		ofxKinect kinects[3];
 		kinectCloud kinectClouds[3];
 
@@ -46,15 +49,16 @@ class testApp : public ofBaseApp{
 
         void setUpKinectClouds();
 
+        void updateKinectClouds();
+
+        void drawKinectClouds();
+
 		ofCamera camera;
 		ofxVec3f cam_location;
 
         void updateCamera();
 
         void drawOrigin();
-		void meshCloud();
 
 		ofMesh mesh;
-
-
 };
