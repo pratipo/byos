@@ -6,6 +6,8 @@ void testApp::setup(){
 
     ofSetVerticalSync(true);
 
+    autoRotate = false;
+
     kinect1.init(false, false);
 	kinect1.open("A00364911617035A"); // open by serial number
 
@@ -34,25 +36,20 @@ void testApp::updateCamera(){
     float distance = 3000;
     float speed = 20.0;
 
-    cam_location = ofxVec3f(    sin(2.0*PI*ofGetElapsedTimef()/speed)*distance,
-                                cos(2.0*PI*ofGetElapsedTimef()/speed)*distance,
-                                1000); //cos(2.0*PI*ofGetElapsedTimef())*distance);
-
-//    if (autoRotate){
-//        eyeVector = eyeVectorDisplay; //* ofxVec3f(   sin(2.0*PI*second/20.0)*distance,
-//                                //* 0.0,
-//                                //* cos(2.0*PI*second/20.0)*distance    );
-//    }
-//    else{
-//        eyeVector = ofxVec3f(   sin(4.0*PI*mouseX/ofGetWidth())*cos(1.0*PI*mouseY/ofGetHeight() - PI/2.0) *distance,
-//                                sin(1.0*PI*mouseY/ofGetHeight() - PI/2.0)*distance,
-//                                cos(4.0*PI*mouseX/ofGetWidth())*cos(1.0*PI*mouseY/ofGetHeight() - PI/2.0) *distance     );
-//    }
+    if (autoRotate){
+        cam_location = ofxVec3f(    sin(2.0*PI*ofGetElapsedTimef()/speed) * distance,
+                                    cos(2.0*PI*ofGetElapsedTimef()/speed) * distance,
+                                    1000); // z elevation
+    }
+    else{
+        cam_location = ofxVec3f(    sin(4.0*PI*mouseX/ofGetWidth())*cos(1.0*PI*mouseY/ofGetHeight() - PI/2.0) * distance,
+                                    cos(4.0*PI*mouseX/ofGetWidth())*cos(1.0*PI*mouseY/ofGetHeight() - PI/2.0) * distance,
+                                    sin(1.0*PI*mouseY/ofGetHeight() - PI/2.0) * distance); // z elevation
+    }
 
     camera.resetTransform();
     camera.setPosition(cam_location);
     camera.lookAt(ofVec3f(0,0,1000), ofVec3f(0,0,1));
-
 }
 
 //--------------------------------------------------------------
