@@ -16,6 +16,7 @@ class kinectCloud : public ofNode{
     public:
 
         int                     id;
+        int                     selected;
         ///size
         int                     w;
         int                     h;
@@ -25,6 +26,7 @@ class kinectCloud : public ofNode{
         ofMesh                  mesh;
         ofxMatrix4x4            model;
 
+        bool                    clips;
         float                   xClip;
         float                   XClip;
         float                   yClip;
@@ -48,6 +50,7 @@ class kinectCloud : public ofNode{
         void meshCloud();
         void update();
 
+        void drawClips();
         virtual void customDraw();
 
         /// EXPORT METHODS

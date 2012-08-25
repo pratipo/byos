@@ -17,26 +17,15 @@
 class testApp : public ofBaseApp{
 
 	public:
-		void setup();
-		void update();
-		void draw();
-
-		void keyPressed  (int key);
-		void keyReleased(int key);
-		void mouseMoved(int x, int y );
-		void mouseDragged(int x, int y, int button);
-		void mousePressed(int x, int y, int button);
-		void mouseReleased(int x, int y, int button);
-		void windowResized(int w, int h);
-		void dragEvent(ofDragInfo dragInfo);
-		void gotMessage(ofMessage msg);
+        ofxXmlSettings          XML;
 
         //------------------------------------
         ofxPanel gui;
 
         ofxParameter<bool> autorotation;
+        ofxParameter<bool> clips;
 
-
+        void clipsChanged(bool & clips);
         //------------------------------------
         int curK;
 
@@ -52,6 +41,8 @@ class testApp : public ofBaseApp{
 
         void setUpKinectClouds();
 
+        void setup();
+        //------------------------------------
         void updateKinects();
         void updateKinectClouds();
 
@@ -63,7 +54,23 @@ class testApp : public ofBaseApp{
 
         void updateCamera();
 
+        void update();
+        //------------------------------------
         void drawOrigin();
 
-		ofMesh mesh;
+        void draw();
+        //------------------------------------
+
+        void saveClouds();
+
+        //------------------------------------
+        void keyPressed  (int key);
+		void keyReleased(int key);
+		void mouseMoved(int x, int y );
+		void mouseDragged(int x, int y, int button);
+		void mousePressed(int x, int y, int button);
+		void mouseReleased(int x, int y, int button);
+		void windowResized(int w, int h);
+		void dragEvent(ofDragInfo dragInfo);
+		void gotMessage(ofMessage msg);
 };

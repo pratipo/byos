@@ -22,11 +22,14 @@ void testApp::setup(){
 
     gui.setup();
 	gui.add(autorotation.set("auto rotation",false));
+	gui.add(clips.set("clips",true));
+
+    clips.addListener(this,&testApp::clipsChanged);
 
     curK = 0;
 
     kserials[0] = "A00364911617035A"; //, "x", "y"};
-    kColors[0] = ofColor(255,0,0); kColors[1] = ofColor(0,255,0); kColors[2] = ofColor(255,255,0);
+    kColors[0] = ofColor(255,0,0); kColors[1] = ofColor(0,200,55); kColors[2] = ofColor(255,255,0);
     kHeights[0] = kHeights[1] = kHeights[2] = 740;
 
     triangle_radius = 2100;
@@ -135,32 +138,42 @@ void testApp::draw(){
 	camera.begin();
 
         drawOrigin();
-
-        glEnable(GL_DEPTH_TEST);
         drawKinectClouds();
-        glDisable(GL_DEPTH_TEST);
 
     camera.end();
 	glDisable(GL_DEPTH_TEST);
 
 }
 
+void testApp::saveClouds(){
+
+    for(int i = 0; i<nK; i++){
+        kinectClouds[i].mesh.save(ofGetTimestampString()+"i"+".ply");
+    }
+
+}
+
 //--------------------------------------------------------------
 void testApp::keyPressed(int key){
 
+    kinectClouds[0].selected = kinectClouds[1].selected = kinectClouds[2].selected = false;
+
     switch (key){
         case 'z':
-            mesh.save(ofGetTimestampString()+".ply");
+            saveClouds();
             break;
         case 'x':
             autorotation = !autorotation;
             break;
+        case 'c':
+            clips = !clips;
+            break;
 
         case '+':
-            cam_distance += 100;
+            cam_distance -= 100;
             break;
         case '-':
-            cam_distance -= 100;
+            cam_distance += 100;
             break;
 
         case '1':
@@ -173,10 +186,10 @@ void testApp::keyPressed(int key){
             curK = 2;
             break;
 
-        case 'q':
+        case 's':
             kinectClouds[curK].posX -= 10;
             break;
-        case 'e':
+        case 'w':
             kinectClouds[curK].posX += 10;
             break;
         case 'a':
@@ -185,18 +198,19 @@ void testApp::keyPressed(int key){
         case 'd':
             kinectClouds[curK].posY += 10;
             break;
-        case 's':
+        case 'q':
             kinectClouds[curK].posZ -= 10;
             break;
-        case 'w':
+        case 'e':
             kinectClouds[curK].posZ += 10;
             break;
 
 
-        case 'A':
+
+        case 'D':
             kinectClouds[curK].rotX -= 1;
             break;
-        case 'D':
+        case 'A':
             kinectClouds[curK].rotX += 1;
             break;
         case 'S':
@@ -205,24 +219,24 @@ void testApp::keyPressed(int key){
         case 'W':
             kinectClouds[curK].rotY += 1;
             break;
-        case 'Q':
+        case 'E':
             kinectClouds[curK].rotZ -= 1;
             break;
-        case 'E':
+        case 'Q':
             kinectClouds[curK].rotZ += 1;
             break;
 
 
-        case 'f':
+        case 'g':
             kinectClouds[curK].xClip -= 10;
             break;
-        case 'h':
+        case 't':
             kinectClouds[curK].XClip -= 10;
             break;
-        case 'g':
+        case 'f':
             kinectClouds[curK].yClip -= 10;
             break;
-        case 't':
+        case 'h':
             kinectClouds[curK].YClip -= 10;
             break;
         case 'r':
@@ -232,16 +246,16 @@ void testApp::keyPressed(int key){
             kinectClouds[curK].ZClip -= 10;
             break;
 
-        case 'F':
+        case 'G':
             kinectClouds[curK].xClip += 10;
             break;
-        case 'H':
+        case 'T':
             kinectClouds[curK].XClip += 10;
             break;
-        case 'G':
+        case 'F':
             kinectClouds[curK].yClip += 10;
             break;
-        case 'T':
+        case 'H':
             kinectClouds[curK].YClip += 10;
             break;
         case 'R':
@@ -252,6 +266,8 @@ void testApp::keyPressed(int key){
             break;
 
     }
+
+    kinectClouds[curK].selected = true;
 
 }
 
@@ -297,3 +313,9 @@ void testApp::dragEvent(ofDragInfo dragInfo){
 
 //--------------------------------------------------------------
 
+void testApp::clipsChanged(bool & clips){
+
+    for(int i = 0; i<nK; i++){
+        kinectClouds[i].clips = clips;
+    }
+}
