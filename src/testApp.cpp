@@ -34,11 +34,12 @@ void testApp::setup(){
 
     triangle_radius = 2100;
 
-    ofBackground(0);
     ofEnableAlphaBlending();
 
     cam_distance = 3000;
     camera.setFarClip(10000);
+
+    loadXML("settings.xml");
 
     setUpKinects();
     setUpKinectClouds();
@@ -145,12 +146,77 @@ void testApp::draw(){
 
 }
 
+//--------------------------------------------------------------
+
 void testApp::saveClouds(){
 
     for(int i = 0; i<nK; i++){
         kinectClouds[i].mesh.save(ofGetTimestampString()+"i"+".ply");
     }
 
+}
+
+void testApp::loadXML(string file){
+
+    if( XML.loadFile(file) )
+		cout << "settings.xml loaded!" << endl;
+    else
+        cout << "settings.xml NOT loaded!" << endl;
+
+    cam_distance = XML.getValue("DISTANCE", 3000); //* 400
+
+    for (int k=0; k<nK; k++){
+        std::ostringstream s;
+
+        s << "MODEL" << k << ":XCLIP";
+        kinectClouds[k].xClip = XML.getValue(s.str(), 0.0);
+        s.str("");
+        s << "MODEL" << k << ":XXCLIP";
+        kinectClouds[k].XClip = XML.getValue(s.str(), 0.0);
+        s.str("");
+        s << "MODEL" << k << ":YCLIP";
+        kinectClouds[k].yClip = XML.getValue(s.str(), 0.0);
+        s.str("");
+        s << "MODEL" << k << ":YYCLIP";
+        kinectClouds[k].YClip = XML.getValue(s.str(), 0.0);
+        s.str("");
+        s << "MODEL" << k << ":ZCLIP";
+        kinectClouds[k].zClip = XML.getValue(s.str(), 0.0);
+        s.str("");
+        s << "MODEL" << k << ":ZZCLIP";
+        kinectClouds[k].ZClip = XML.getValue(s.str(), 0.0);
+        s.str("");
+    }
+}
+
+void testApp::updateXML(){
+
+    XML.setValue("DISTANCE", cam_distance);
+
+    for (int k=0; k<nK; k++){
+        std::ostringstream s;
+        s << "MODEL" << k << ":XCLIP";
+        XML.setValue( s.str(), kinectClouds[k].xClip );
+        s.str("");
+        s << "MODEL" << k << ":XXCLIP";
+        XML.setValue( s.str(), kinectClouds[k].XClip );
+        s.str("");
+        s << "MODEL" << k << ":YCLIP";
+        XML.setValue( s.str(), kinectClouds[k].yClip );
+        s.str("");
+        s << "MODEL" << k << ":YYCLIP";
+        XML.setValue( s.str(), kinectClouds[k].YClip );
+        s.str("");
+        s << "MODEL" << k << ":ZCLIP";
+        XML.setValue( s.str(), kinectClouds[k].zClip );
+        s.str("");
+        s << "MODEL" << k << ":ZZCLIP";
+        XML.setValue( s.str(), kinectClouds[k].ZClip );
+        s.str("");
+    }
+
+    XML.saveFile("settings.xml");
+    cout << "settings.xml saved !" << endl;
 }
 
 //--------------------------------------------------------------
@@ -269,6 +335,11 @@ void testApp::keyPressed(int key){
 
     kinectClouds[curK].selected = true;
 
+}
+
+void testApp::exit(){
+
+    updateXML();
 }
 
 //--------------------------------------------------------------

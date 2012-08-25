@@ -1,7 +1,14 @@
 #include "kinectCloud.h"
 
 kinectCloud::kinectCloud()
-{}
+{
+    xClip = 500;
+    XClip = 2000;
+    yClip = -1000;
+    YClip = 1000;
+    zClip = -1000;
+    ZClip = 1000;
+}
 
 void kinectCloud::init(int i, ofxKinect* k)
 {
@@ -21,13 +28,6 @@ void kinectCloud::init(int i, ofxKinect* k)
 //    model.glRotate(90.0, 0.0, 0.0, -1.0);
 
     clips = true;
-
-    xClip = 500;
-    XClip = 2000;
-    yClip = -1000;
-    YClip = 1000;
-    zClip = -1000;
-    ZClip = 1000;
 
     posX = 0.0;
     posY = 0.0;
@@ -97,7 +97,7 @@ void kinectCloud::drawClips(){
 
 void kinectCloud::customDraw()
 {
-    ofDrawAxis(20);
+    ofDrawAxis(200);
     ofCircle(0,0,50);
 
     if (clips)

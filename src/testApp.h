@@ -18,7 +18,8 @@ class testApp : public ofBaseApp{
 
 	public:
         ofxXmlSettings          XML;
-
+        void loadXML(string file);
+        void updateXML();
         //------------------------------------
         ofxPanel gui;
 
@@ -62,6 +63,8 @@ class testApp : public ofBaseApp{
         //------------------------------------
 
         void saveClouds();
+
+        void exit();
 
         //------------------------------------
         void keyPressed  (int key);
