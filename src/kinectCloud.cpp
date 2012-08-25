@@ -61,11 +61,13 @@ void kinectCloud::update(){
     this->rotate(-90.0    + rotY,  0.0,1.0,0.0); // y
     this->rotate(120.0*id  + rotZ,  0.0,0.0,1.0); // z
 
-    this->setPosition(  2100 * cos(TWO_PI*(float)id/nK)   + posX, // triangle_radius
-                        2100 * sin(TWO_PI*(float)id/nK)   + posY, // triangle_radius
-                        740                                 + posZ); // kHeights[i]
+    this->move ( 2100 * cos(TWO_PI*(float)id/nK), // triangle_radius
+                 2100 * sin(TWO_PI*(float)id/nK), // triangle_radius
+                 740                            ); // kHeights[i]
 
-
+    this->truck(posX);
+    this->boom(posY);
+    this->dolly(posZ);
 }
 
 void kinectCloud::customDraw()

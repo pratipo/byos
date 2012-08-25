@@ -38,6 +38,8 @@ class testApp : public ofBaseApp{
 
 
         //------------------------------------
+        int curK;
+
         string kserials[3];
         ofColor kColors[3];
         int kHeights[3];

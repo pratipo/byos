@@ -23,6 +23,8 @@ void testApp::setup(){
     gui.setup();
 	gui.add(autorotation.set("auto rotation",false));
 
+    curK = 0;
+
     kserials[0] = "A00364911617035A"; //, "x", "y"};
     kColors[0] = ofColor(255,0,0); kColors[1] = ofColor(0,255,0); kColors[2] = ofColor(255,255,0);
     kHeights[0] = kHeights[1] = kHeights[2] = 740;
@@ -147,10 +149,10 @@ void testApp::draw(){
 void testApp::keyPressed(int key){
 
     switch (key){
-        case 's':
+        case 'z':
             mesh.save(ofGetTimestampString()+".ply");
             break;
-        case 'r':
+        case 'x':
             autorotation = !autorotation;
             break;
 
@@ -160,6 +162,95 @@ void testApp::keyPressed(int key){
         case '-':
             cam_distance -= 100;
             break;
+
+        case '1':
+            curK = 0;
+            break;
+        case '2':
+            curK = 1;
+            break;
+        case '3':
+            curK = 2;
+            break;
+
+        case 'q':
+            kinectClouds[curK].posX -= 10;
+            break;
+        case 'e':
+            kinectClouds[curK].posX += 10;
+            break;
+        case 'a':
+            kinectClouds[curK].posY -= 10;
+            break;
+        case 'd':
+            kinectClouds[curK].posY += 10;
+            break;
+        case 's':
+            kinectClouds[curK].posZ -= 10;
+            break;
+        case 'w':
+            kinectClouds[curK].posZ += 10;
+            break;
+
+
+        case 'A':
+            kinectClouds[curK].rotX -= 1;
+            break;
+        case 'D':
+            kinectClouds[curK].rotX += 1;
+            break;
+        case 'S':
+            kinectClouds[curK].rotY -= 1;
+            break;
+        case 'W':
+            kinectClouds[curK].rotY += 1;
+            break;
+        case 'Q':
+            kinectClouds[curK].rotZ -= 1;
+            break;
+        case 'E':
+            kinectClouds[curK].rotZ += 1;
+            break;
+
+
+        case 'f':
+            kinectClouds[curK].xClip -= 10;
+            break;
+        case 'h':
+            kinectClouds[curK].XClip -= 10;
+            break;
+        case 'g':
+            kinectClouds[curK].yClip -= 10;
+            break;
+        case 't':
+            kinectClouds[curK].YClip -= 10;
+            break;
+        case 'r':
+            kinectClouds[curK].zClip -= 10;
+            break;
+        case 'y':
+            kinectClouds[curK].ZClip -= 10;
+            break;
+
+        case 'F':
+            kinectClouds[curK].xClip += 10;
+            break;
+        case 'H':
+            kinectClouds[curK].XClip += 10;
+            break;
+        case 'G':
+            kinectClouds[curK].yClip += 10;
+            break;
+        case 'T':
+            kinectClouds[curK].YClip += 10;
+            break;
+        case 'R':
+            kinectClouds[curK].zClip += 10;
+            break;
+        case 'Y':
+            kinectClouds[curK].ZClip += 10;
+            break;
+
     }
 
 }
