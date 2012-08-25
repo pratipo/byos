@@ -39,6 +39,12 @@
 		<Unit filename="src/testApp.h">
 			<Option virtualFolder="src/" />
 		</Unit>
+		<Unit filename="src/kinectCloud.cpp">
+			<Option virtualFolder="src/" />
+		</Unit>
+		<Unit filename="src/kinectCloud.h">
+			<Option virtualFolder="src/" />
+		</Unit>
 		<Extensions>
 			<code_completion />
 			<envvars />

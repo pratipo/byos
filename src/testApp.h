@@ -12,6 +12,8 @@
 #include "ofxPCL.h"
 #include "ofxVectorMath.h"
 
+#include "kinectCloud.h"
+
 class testApp : public ofBaseApp{
 
 	public:
@@ -36,15 +38,22 @@ class testApp : public ofBaseApp{
 
 
         //------------------------------------
+        string kserials[3];
+		ofxKinect kinects[3];
+		kinectCloud kinectClouds[3];
+
+		void setUpKinects();
+
+        void setUpKinectClouds();
+
+		ofCamera camera;
+		ofxVec3f cam_location;
+
         void updateCamera();
 
         void drawOrigin();
 		void meshCloud();
 
-		ofCamera camera;
-		ofxVec3f cam_location;
-
-		ofxKinect kinect1, kinect2, kienct3;
 		ofMesh mesh;
 
 

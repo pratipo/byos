@@ -1,24 +1,38 @@
 #include "testApp.h"
 
+void testApp::setUpKinects(){
+
+    int i = 0;
+    kinects[i].init(false, false);
+	kinects[i].open(kserials[i]); // open by serial number
+}
+
+void testApp::setUpKinectClouds(){
+
+    int i = 0;
+    kinectClouds[i].init(0, 1);
+
+}
+
 //--------------------------------------------------------------
 void testApp::setup(){
     ofSetLogLevel(OF_LOG_VERBOSE);
 
     ofSetVerticalSync(true);
 
-    autoRotate = false;
-
     gui.setup();
 	gui.add(autorotation.set("auto rotation",false));
 
-
-    kinect1.init(false, false);
-	kinect1.open("A00364911617035A"); // open by serial number
+    kserials[0] = "A00364911617035A"; //, "x", "y"};
+    setUpKinects();
+    setUpKinectClouds();
 
     ofBackground(0);
     ofEnableAlphaBlending();
     mesh.setMode(OF_PRIMITIVE_POINTS);
 }
+
+// MyCustom3DNode*node=newMyCustom3DNode(); node->setPosition( cos((float)i/10*TWO_PI)*r ,sin((float)i/10*TWO_PI)*r ,-5 );
 
 void testApp::meshCloud(){
 	mesh.clear();
@@ -28,8 +42,8 @@ void testApp::meshCloud(){
 	int step = 2;
 	for(int y = 0; y < h; y += step) {
 		for(int x = 0; x < w; x += step) {
-			if(kinect1.getDistanceAt(x, y) > 0) {
-				mesh.addVertex(kinect1.getWorldCoordinateAt(x, y));
+			if(kinects[0].getDistanceAt(x, y) > 0) {
+				mesh.addVertex(kinects[0].getWorldCoordinateAt(x, y));
 			}
 		}
 	}
@@ -61,11 +75,11 @@ void testApp::update(){
 
     updateCamera();
 
-    kinect1.update();
+    kinects[0].update();
 
-    if(kinect1.isFrameNew()){
+    if(kinects[0].isFrameNew()){
 		meshCloud();
-	}s
+	}
 }
 
 void testApp::drawOrigin(){
@@ -96,7 +110,7 @@ void testApp::draw(){
     ofDrawBitmapString(ofToString(ofGetFrameRate()),2,10);
     ofDrawBitmapString(ofToString(ofGetElapsedTimef()),2,20);
 
-	kinect1.drawDepth(2,40,640/4,480/4);
+	kinects[0].drawDepth(2,40,640/4,480/4);
 
 
     glEnable(GL_DEPTH_TEST);
@@ -123,8 +137,13 @@ void testApp::draw(){
 //--------------------------------------------------------------
 void testApp::keyPressed(int key){
 
-    if(key=='s'){
-    	mesh.save(ofGetTimestampString()+".ply");
+    switch (key){
+        case 's':
+            mesh.save(ofGetTimestampString()+".ply");
+            break;
+        case 'r':
+            autorotation = !autorotation;
+            break;
     }
 
 }
