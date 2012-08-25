@@ -8,6 +8,10 @@ void testApp::setup(){
 
     autoRotate = false;
 
+    gui.setup();
+	gui.add(autorotation.set("auto rotation",false));
+
+
     kinect1.init(false, false);
 	kinect1.open("A00364911617035A"); // open by serial number
 
@@ -36,7 +40,7 @@ void testApp::updateCamera(){
     float distance = 3000;
     float speed = 20.0;
 
-    if (autoRotate){
+    if (autorotation){
         cam_location = ofxVec3f(    sin(2.0*PI*ofGetElapsedTimef()/speed) * distance,
                                     cos(2.0*PI*ofGetElapsedTimef()/speed) * distance,
                                     1000); // z elevation
@@ -61,10 +65,7 @@ void testApp::update(){
 
     if(kinect1.isFrameNew()){
 		meshCloud();
-	}
-
-    //camera.resetTransform();
-    //camera.truck(mouseX-ofGetWidth()*.5);
+	}s
 }
 
 void testApp::drawOrigin(){
@@ -89,6 +90,8 @@ void testApp::drawOrigin(){
 //--------------------------------------------------------------
 void testApp::draw(){
     ofSetColor(255);
+
+    gui.draw();
 
     ofDrawBitmapString(ofToString(ofGetFrameRate()),2,10);
     ofDrawBitmapString(ofToString(ofGetElapsedTimef()),2,20);
@@ -165,3 +168,6 @@ void testApp::gotMessage(ofMessage msg){
 void testApp::dragEvent(ofDragInfo dragInfo){
 
 }
+
+//--------------------------------------------------------------
+

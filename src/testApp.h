@@ -29,7 +29,13 @@ class testApp : public ofBaseApp{
 		void dragEvent(ofDragInfo dragInfo);
 		void gotMessage(ofMessage msg);
 
-        bool autoRotate;
+        //------------------------------------
+        ofxPanel gui;
+
+        ofxParameter<bool> autorotation;
+
+
+        //------------------------------------
         void updateCamera();
 
         void drawOrigin();
@@ -41,5 +47,5 @@ class testApp : public ofBaseApp{
 		ofxKinect kinect1, kinect2, kienct3;
 		ofMesh mesh;
 
-		ofxPanel gui;
+
 };
