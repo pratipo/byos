@@ -54,7 +54,7 @@ class kinectCloud : public ofNode{
         virtual void customDraw();
 
         /// EXPORT METHODS
-
+        void ascVertices(ofstream& f);
 
         ///
         virtual ~kinectCloud();

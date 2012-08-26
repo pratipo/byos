@@ -109,6 +109,21 @@ void kinectCloud::customDraw()
     glPointSize(1.0);
 }
 
+void kinectCloud::ascVertices(ofstream& f)
+{
+    ofxMatrix4x4 m, mi;
+    m = this->getLocalTransformMatrix();
+
+    mi = ofMatrix4x4::getInverseOf(m);
+
+    int nv = mesh.getNumVertices();
+    for(int i=0; i<nv; i++){
+        //ofVec3f p = mi*(ofVec3f(mesh.getVertex(i)));
+        ofVec3f p = ofVec3f(mesh.getVertex(i));
+        f << p.x << ", " << p.y << ", " << p.z << endl;
+    }
+}
+
 //--------------------------------------------------------------
 kinectCloud::~kinectCloud()
 {

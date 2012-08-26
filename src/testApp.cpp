@@ -34,6 +34,7 @@ void testApp::setup(){
 
     triangle_radius = 2100;
 
+    ofBackground(0);
     ofEnableAlphaBlending();
 
     cam_distance = 3000;
@@ -156,6 +157,38 @@ void testApp::saveClouds(){
 
 }
 
+void testApp::exportAsc()
+{
+    ostringstream filename;
+    ofstream export_file;
+
+    string timestamp = ofGetTimestampString();
+
+    cout << "enter name : " << endl;
+    string nom;
+    cin >> nom;
+
+    std::ostringstream pathname;
+    pathname << "/home/dbsus4/Desktop/scans/" << timestamp << "_" << nom << "/";
+    mkdir(pathname.str().c_str(), 0777);
+
+    filename << pathname.str() << timestamp << "_" << nom << ".asc" ;
+
+//    /// SHUTTER
+//    serial.writeByte('H');
+//    ofSleepMillis(500);
+
+    cout << "saving asc model to... "+filename.str() << endl;
+    export_file.open(filename.str().c_str());
+
+    for (int k=0; k<1; k++)
+        kinectClouds[k].ascVertices(export_file);
+
+    export_file.close();
+    cout << "finnished exporting to "+filename.str() << endl;
+}
+
+
 void testApp::loadXML(string file){
 
     if( XML.loadFile(file) )
@@ -226,7 +259,7 @@ void testApp::keyPressed(int key){
 
     switch (key){
         case 'z':
-            saveClouds();
+            exportAsc();
             break;
         case 'x':
             autorotation = !autorotation;

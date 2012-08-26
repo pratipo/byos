@@ -63,6 +63,7 @@ class testApp : public ofBaseApp{
         //------------------------------------
 
         void saveClouds();
+        void exportAsc();
 
         void exit();
 
