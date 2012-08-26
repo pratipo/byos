@@ -1,21 +1,23 @@
 #include "testApp.h"
 
-void testApp::setUpKinects(){
-
-    int i = 0;
-    kinects[i].init(false, false);
-	kinects[i].open(kserials[i]); // open by serial number
+void testApp::setUpKinects()
+{
+    for(int i = 0; i<nK; i++){
+        kinects[i].init(false, false);
+        kinects[i].open(kserials[i]); // open by serial number
+    }
 }
 
-void testApp::setUpKinectClouds(){
-
+void testApp::setUpKinectClouds()
+{
     for(int i = 0; i<nK; i++){
         kinectClouds[i].init(i, &kinects[i]);
     }
 }
 
 
-void testApp::setup(){
+void testApp::setup()
+{
     ofSetLogLevel(OF_LOG_VERBOSE);
 
     ofSetVerticalSync(true);
@@ -34,6 +36,9 @@ void testApp::setup(){
     curK = 0;
 
     kserials[0] = "A00364911617035A"; //, "x", "y"};
+    kserials[1] = "A00365805405044A";
+    kserials[2] = "A00362803303039A";
+
     kColors[0] = ofColor(255,0,0); kColors[1] = ofColor(0,200,55); kColors[2] = ofColor(255,255,0);
     kHeights[0] = kHeights[1] = kHeights[2] = 740;
 
@@ -87,14 +92,14 @@ void testApp::resetClips(bool& resetClip)
 
 void testApp::updateKinects(){
 
-    int i = 0;
-    //for (int i=0; i<nK; i++){
+    //int i = 0;
+    for (int i=0; i<nK; i++){
         kinects[i].update();
 
         if(kinects[i].isFrameNew()){
             kinectClouds[i].meshCloud();
         }
-    //}
+    }
 }
 
 void testApp::updateKinectClouds(){
@@ -433,8 +438,8 @@ void testApp::dragEvent(ofDragInfo dragInfo){
 
 //--------------------------------------------------------------
 
-void testApp::clipsChanged(bool & clips){
-
+void testApp::clipsChanged(bool & clips)
+{
     for(int i = 0; i<nK; i++){
         kinectClouds[i].clips = clips;
     }

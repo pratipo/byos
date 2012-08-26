@@ -1,37 +1,4 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <CodeBlocks_layout_file>
 	<ActiveTarget name="Debug" />
-	<File name="../../../addons/ofxKinect/src/ofxKinect.cpp" open="0" top="0" tabpos="0">
-		<Cursor position="7663" topLine="286" />
-	</File>
-	<File name="../../../addons/ofxKinect/src/ofxKinect.h" open="0" top="0" tabpos="3">
-		<Cursor position="6379" topLine="178" />
-	</File>
-	<File name="../../../addons/ofxPCL/src/ofxPCL.cpp" open="0" top="0" tabpos="0">
-		<Cursor position="13483" topLine="319" />
-	</File>
-	<File name="../../../addons/ofxPCL/src/ofxPCL.h" open="0" top="0" tabpos="0">
-		<Cursor position="3384" topLine="59" />
-	</File>
-	<File name="../../../addons/ofxVectorMath/src/ofxVec3f.h" open="0" top="0" tabpos="0">
-		<Cursor position="173" topLine="0" />
-	</File>
-	<File name="config.make" open="0" top="0" tabpos="0">
-		<Cursor position="758" topLine="0" />
-	</File>
-	<File name="src/kinectCloud.cpp" open="1" top="1" tabpos="4">
-		<Cursor position="2588" topLine="98" />
-	</File>
-	<File name="src/kinectCloud.h" open="1" top="0" tabpos="3">
-		<Cursor position="1334" topLine="34" />
-	</File>
-	<File name="src/main.cpp" open="0" top="0" tabpos="0">
-		<Cursor position="384" topLine="0" />
-	</File>
-	<File name="src/testApp.cpp" open="1" top="0" tabpos="2">
-		<Cursor position="3437" topLine="153" />
-	</File>
-	<File name="src/testApp.h" open="1" top="0" tabpos="1">
-		<Cursor position="1306" topLine="51" />
-	</File>
 </CodeBlocks_layout_file>

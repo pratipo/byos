@@ -5,22 +5,13 @@ kinectCloud::kinectCloud(){ }
 void kinectCloud::init(int i, ofxKinect* k)
 {
     id = i;
-
-    kinect = k;
+    kinect = k; // pointer to assigned kinect device
 
     step = 1;
     w = 640/step;
     h = 480/step;
 
-    /// MODEL matrix RESET ?
-//    model.makeIdentityMatrix();
-//    model.glScale(400.0, 400.0, 400.0);
-//    model.glRotate(120.0*id, 0.0, 1.0, 0.0);
-//    model.glTranslate(0.0, 0.0, -800.0/400.0);
-//    model.glRotate(90.0, 0.0, 0.0, -1.0);
-
     clips = true;
-
     posX = posY = posZ = 0.0;
     rotX  = rotY = rotZ = 0.0;
 
@@ -52,7 +43,6 @@ void kinectCloud::meshCloud()
 			if(kinect->getDistanceAt(x, y) > 0) {
                 ofVec3f o = kinect->getWorldCoordinateAt(x, y);
                 ofVec3f p = ofVec3f(o.z,-o.y,o.x);
-                //ofVec3f p = ofVec3f(o.x,o.y,o.z);
 				if( (p.x > xClip) && (p.x < XClip) &&
                     (p.y > yClip) && (p.y < YClip) &&
                     (p.z > zClip) && (p.z < ZClip)   )
@@ -99,10 +89,10 @@ void kinectCloud::drawClips()
         glVertex3f(XClip, yClip, ZClip);
     glEnd();
 
-    glLineWidth(6.0);
-    std::cout << " cloud " << id << std::endl;
-    std::cout << "\t"<< this->getXAxis() << " " << this->getYAxis() << " "<< this->getZAxis() << " " << std::endl;
-    ofLine(ofVec3f(0,0,0),(ofVec3f)this->getYAxis());
+//    glLineWidth(6.0);
+//    std::cout << " cloud " << id << std::endl;
+//    std::cout << "\t"<< this->getXAxis() << " " << this->getYAxis() << " "<< this->getZAxis() << " " << std::endl;
+//    ofLine(ofVec3f(0,0,0),(ofVec3f)this->getYAxis());
 }
 
 void kinectCloud::customDraw()
