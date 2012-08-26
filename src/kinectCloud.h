@@ -47,6 +47,9 @@ class kinectCloud : public ofNode{
 
         void init(int i, ofxKinect* k);
 
+        void resetTransf();
+        void resetClips();
+
         void meshCloud();
         void update();
 

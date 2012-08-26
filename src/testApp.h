@@ -26,6 +26,9 @@ class testApp : public ofBaseApp{
         ofxParameter<bool> autorotation;
         ofxParameter<bool> clips;
 
+        ofxParameter<bool> resetTransformation;
+        ofxParameter<bool> resetClip;
+
         void clipsChanged(bool & clips);
         //------------------------------------
         int curK;
@@ -35,38 +38,36 @@ class testApp : public ofBaseApp{
         int kHeights[3];
 		ofxKinect kinects[3];
 		kinectCloud kinectClouds[3];
-
 		int triangle_radius;
 
 		void setUpKinects();
-
         void setUpKinectClouds();
 
         void setup();
         //------------------------------------
-        void updateKinects();
-        void updateKinectClouds();
-
-        void drawKinectClouds();
-
-		ofCamera camera;
+        ofCamera camera;
 		ofVec3f cam_location;
 		int cam_distance;
 
         void updateCamera();
 
+        void resetTransf(bool& resetTransformation);
+        void resetClips(bool& resetClip);
+
+        void updateKinects();
+        void updateKinectClouds();
+
         void update();
         //------------------------------------
         void drawOrigin();
+        void drawKinectClouds();
 
         void draw();
         //------------------------------------
-
         void saveClouds();
         void exportAsc();
 
         void exit();
-
         //------------------------------------
         void keyPressed  (int key);
 		void keyReleased(int key);

@@ -1,14 +1,6 @@
 #include "kinectCloud.h"
 
-kinectCloud::kinectCloud()
-{
-    xClip = 500;
-    XClip = 2000;
-    yClip = -1000;
-    YClip = 1000;
-    zClip = -1000;
-    ZClip = 1000;
-}
+kinectCloud::kinectCloud(){ }
 
 void kinectCloud::init(int i, ofxKinect* k)
 {
@@ -29,25 +21,38 @@ void kinectCloud::init(int i, ofxKinect* k)
 
     clips = true;
 
-    posX = 0.0;
-    posY = 0.0;
-    posZ = 0.0;
-
-    rotX = 0.0;
-    rotY = 0.0;
-    rotZ = 0.0;
+    posX = posY = posZ = 0.0;
+    rotX  = rotY = rotZ = 0.0;
 
     mesh.setMode(OF_PRIMITIVE_POINTS);
 }
 
-void kinectCloud::meshCloud(){
+void kinectCloud::resetClips()
+{
+    xClip = 500;
+    XClip = 2000;
+    yClip = -1000;
+    YClip = 1000;
+    zClip = -1000;
+    ZClip = 1000;
+}
+
+void kinectCloud::resetTransf()
+{
+    posX = posY = posZ = 0.0;
+    rotX  = rotY = rotZ = 0.0;
+}
+
+void kinectCloud::meshCloud()
+{
 	mesh.clear();
 
 	for(int y = 0; y < h; y += step) {
 		for(int x = 0; x < w; x += step) {
 			if(kinect->getDistanceAt(x, y) > 0) {
                 ofVec3f o = kinect->getWorldCoordinateAt(x, y);
-                ofVec3f p = ofVec3f(o.z,o.y,o.x);
+                ofVec3f p = ofVec3f(o.z,-o.y,o.x);
+                //ofVec3f p = ofVec3f(o.x,o.y,o.z);
 				if( (p.x > xClip) && (p.x < XClip) &&
                     (p.y > yClip) && (p.y < YClip) &&
                     (p.z > zClip) && (p.z < ZClip)   )
@@ -57,14 +62,15 @@ void kinectCloud::meshCloud(){
 	}
 }
 
-void kinectCloud::update(){
+void kinectCloud::update()
+{
     this->resetTransform();
 
-    this->setScale(1,-1,1);
+    //this->setScale(1,-1,1);
 
-    this->rotate(0.0         + rotX,  1.0,0.0,0.0); // x
-    this->rotate(0.0         + rotY,  0.0,1.0,0.0); // y
-    this->rotate(120.0*id+180 + rotZ,  0.0,0.0,1.0); // z
+    this->rotate(0.0                + rotX,  1.0,0.0,0.0); // x
+    this->rotate(0.0                + rotY,  0.0,1.0,0.0); // y
+    this->rotate(180.0 + 120.0*id   + rotZ,  0.0,0.0,1.0); // z
 
     this->move ( 2100 * cos(TWO_PI*(float)id/nK), // triangle_radius
                  2100 * sin(TWO_PI*(float)id/nK), // triangle_radius
@@ -73,11 +79,10 @@ void kinectCloud::update(){
     this->dolly(posZ);
     this->truck(posX);
     this->boom(posY);
-
 }
 
-void kinectCloud::drawClips(){
-
+void kinectCloud::drawClips()
+{
     glLineWidth(1.0);
     if (selected)
         glLineWidth(3.0);
@@ -93,6 +98,11 @@ void kinectCloud::drawClips(){
         glVertex3f(XClip, YClip, ZClip);
         glVertex3f(XClip, yClip, ZClip);
     glEnd();
+
+    glLineWidth(6.0);
+    std::cout << " cloud " << id << std::endl;
+    std::cout << "\t"<< this->getXAxis() << " " << this->getYAxis() << " "<< this->getZAxis() << " " << std::endl;
+    ofLine(ofVec3f(0,0,0),(ofVec3f)this->getYAxis());
 }
 
 void kinectCloud::customDraw()
@@ -119,6 +129,7 @@ void kinectCloud::ascVertices(ofstream& f)
     int nv = mesh.getNumVertices();
     for(int i=0; i<nv; i++){
         //ofVec3f p = mi*(ofVec3f(mesh.getVertex(i)));
+        /// POST MULTIPLY POINTS TO ->SCALE >ROTATE(z->up)
         ofVec3f p = ofVec3f(mesh.getVertex(i));
         f << p.x << ", " << p.y << ", " << p.z << endl;
     }

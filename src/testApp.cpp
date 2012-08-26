@@ -23,8 +23,13 @@ void testApp::setup(){
     gui.setup();
 	gui.add(autorotation.set("auto rotation",false));
 	gui.add(clips.set("clips",true));
+	gui.add(resetTransformation.set("reset transf current cloud",false));
+	gui.add(resetClip.set("reset clipping box current cloud",false));
 
     clips.addListener(this,&testApp::clipsChanged);
+
+    resetTransformation.addListener(this,&testApp::resetTransf);
+    resetClip.addListener(this,&testApp::resetClips);
 
     curK = 0;
 
@@ -66,6 +71,18 @@ void testApp::updateCamera(){
     camera.resetTransform();
     camera.setPosition(cam_location);
     camera.lookAt(ofVec3f(0,0,1000), ofVec3f(0,0,1));
+}
+
+void testApp::resetTransf(bool& resetTransformation)
+{
+    kinectClouds[curK].resetTransf();
+    resetTransformation = false;
+}
+
+void testApp::resetClips(bool& resetClip)
+{
+    kinectClouds[curK].resetClips();
+    resetClip = false;
 }
 
 void testApp::updateKinects(){
@@ -149,12 +166,11 @@ void testApp::draw(){
 
 //--------------------------------------------------------------
 
-void testApp::saveClouds(){
-
+void testApp::saveClouds()
+{
     for(int i = 0; i<nK; i++){
         kinectClouds[i].mesh.save(ofGetTimestampString()+"i"+".ply");
     }
-
 }
 
 void testApp::exportAsc()
@@ -291,10 +307,10 @@ void testApp::keyPressed(int key){
         case 'w':
             kinectClouds[curK].posX += 10;
             break;
-        case 'a':
+        case 'd':
             kinectClouds[curK].posY -= 10;
             break;
-        case 'd':
+        case 'a':
             kinectClouds[curK].posY += 10;
             break;
         case 'q':
