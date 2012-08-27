@@ -2,7 +2,7 @@
 
 kinectCloud::kinectCloud(){ }
 
-void kinectCloud::init(int i, ofxKinect* k)
+void kinectCloud::init(int i, ofxKinect* k, int dist)
 {
     id = i;
     kinect = k; // pointer to assigned kinect device
@@ -11,6 +11,7 @@ void kinectCloud::init(int i, ofxKinect* k)
     w = 640/step;
     h = 480/step;
 
+    dist_to_center = dist;
     clips = true;
     posX = posY = posZ = 0.0;
     rotX  = rotY = rotZ = 0.0;
@@ -62,8 +63,8 @@ void kinectCloud::update()
     this->rotate(0.0                + rotY,  0.0,1.0,0.0); // y
     this->rotate(180.0 + 120.0*id   + rotZ,  0.0,0.0,1.0); // z
 
-    this->move ( 2100 * cos(TWO_PI*(float)id/nK), // triangle_radius
-                 2100 * sin(TWO_PI*(float)id/nK), // triangle_radius
+    this->move (dist_to_center * cos(TWO_PI*(float)id/nK),
+                 dist_to_center * sin(TWO_PI*(float)id/nK),
                  740                            ); // kHeights[i]
 
     this->dolly(posZ);

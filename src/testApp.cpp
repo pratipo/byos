@@ -11,10 +11,9 @@ void testApp::setUpKinects()
 void testApp::setUpKinectClouds()
 {
     for(int i = 0; i<nK; i++){
-        kinectClouds[i].init(i, &kinects[i]);
+        kinectClouds[i].init(i, &kinects[i], triangle_radius);
     }
 }
-
 
 void testApp::setup()
 {
@@ -23,6 +22,7 @@ void testApp::setup()
     ofSetVerticalSync(true);
 
     gui.setup();
+
 	gui.add(autorotation.set("auto rotation",false));
 	gui.add(clips.set("clips",true));
 	gui.add(resetTransformation.set("reset transf current cloud",false));
@@ -42,7 +42,7 @@ void testApp::setup()
     kColors[0] = ofColor(255,0,0); kColors[1] = ofColor(0,200,55); kColors[2] = ofColor(255,255,0);
     kHeights[0] = kHeights[1] = kHeights[2] = 740;
 
-    triangle_radius = 2100;
+    triangle_radius = 750; // RECOMMENDED 2100
 
     ofBackground(0);
     ofEnableAlphaBlending();
@@ -156,7 +156,9 @@ void testApp::draw(){
     ofDrawBitmapString(ofToString(ofGetFrameRate()),2,10);
     ofDrawBitmapString(ofToString(ofGetElapsedTimef()),2,20);
 
-	kinects[0].drawDepth(2,40,640/4,480/4);
+    kinects[0].drawDepth(2,40,640/4,480/4);
+    kinects[1].drawDepth(2,170,640/4,480/4);
+    kinects[2].drawDepth(2,300,640/4,480/4);
 
     glEnable(GL_DEPTH_TEST);
 	camera.begin();
@@ -202,7 +204,7 @@ void testApp::exportAsc()
     cout << "saving asc model to... "+filename.str() << endl;
     export_file.open(filename.str().c_str());
 
-    for (int k=0; k<1; k++)
+    for (int k=0; k<nK; k++)
         kinectClouds[k].ascVertices(export_file);
 
     export_file.close();

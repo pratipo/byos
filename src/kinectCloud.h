@@ -26,6 +26,7 @@ class kinectCloud : public ofNode{
         ofMesh                  mesh;
         ofxMatrix4x4            model;
 
+        int                     dist_to_center;
         bool                    clips;
         float                   xClip;
         float                   XClip;
@@ -45,7 +46,7 @@ class kinectCloud : public ofNode{
         /// METHODS
         kinectCloud();
 
-        void init(int i, ofxKinect* k);
+        void init(int i, ofxKinect* k, int dist);
 
         void resetTransf();
         void resetClips();
