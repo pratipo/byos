@@ -112,16 +112,14 @@ void kinectCloud::customDraw()
 
 void kinectCloud::ascVertices(ofstream& f)
 {
-    ofxMatrix4x4 m, mi;
+    ofxMatrix4x4 m;
     m = this->getLocalTransformMatrix();
-
-    mi = ofMatrix4x4::getInverseOf(m);
+    m = ofxMatrix4x4::getTransposedOf(m);
 
     int nv = mesh.getNumVertices();
     for(int i=0; i<nv; i++){
-        //ofVec3f p = mi*(ofVec3f(mesh.getVertex(i)));
-        /// POST MULTIPLY POINTS TO ->SCALE >ROTATE(z->up)
-        ofVec3f p = ofVec3f(mesh.getVertex(i));
+        ofVec3f p = m*(ofVec3f(mesh.getVertex(i)));  // POST MULTIPLY POINTS TO ->SCALE >ROTATE(z->up)
+       //ofVec3f p = ofVec3f(mesh.getVertex(i));
         f << p.x << ", " << p.y << ", " << p.z << endl;
     }
 }
