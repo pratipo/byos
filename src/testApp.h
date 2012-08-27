@@ -23,6 +23,7 @@ class testApp : public ofBaseApp{
         //------------------------------------
         ofxPanel gui;
 
+        ofxParameter<bool> drawdepths;
         ofxParameter<bool> autorotation;
         ofxParameter<bool> clips;
 

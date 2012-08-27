@@ -18,11 +18,11 @@ void testApp::setUpKinectClouds()
 void testApp::setup()
 {
     ofSetLogLevel(OF_LOG_VERBOSE);
-
     ofSetVerticalSync(true);
 
     gui.setup();
 
+    gui.add(drawdepths.set("draw kinects depth",true));
 	gui.add(autorotation.set("auto rotation",false));
 	gui.add(clips.set("clips",true));
 	gui.add(resetTransformation.set("reset transf current cloud",false));
@@ -142,7 +142,7 @@ void testApp::drawOrigin(){
 
     /// TODO draw vertices according to corrected kinect position
     ofSetCircleResolution(3);
-    ofCircle(0,0,2100);
+    ofCircle(0,0,triangle_radius);
 
     ofPopStyle();
 }
@@ -151,24 +151,25 @@ void testApp::drawOrigin(){
 void testApp::draw(){
     ofSetColor(255);
 
-    gui.draw();
-
-    ofDrawBitmapString(ofToString(ofGetFrameRate()),2,10);
-    ofDrawBitmapString(ofToString(ofGetElapsedTimef()),2,20);
-
-    kinects[0].drawDepth(2,40,640/4,480/4);
-    kinects[1].drawDepth(2,170,640/4,480/4);
-    kinects[2].drawDepth(2,300,640/4,480/4);
-
+    if(drawdepths){
+        ofPushMatrix();
+            ofTranslate(0,640/4+20);
+            ofRotateZ(-90);
+            kinects[0].drawDepth(2,40,640/4,480/4);
+            kinects[1].drawDepth(2,170,640/4,480/4);
+            kinects[2].drawDepth(2,300,640/4,480/4);
+        ofPopMatrix();
+    }
     glEnable(GL_DEPTH_TEST);
 	camera.begin();
-
         drawOrigin();
         drawKinectClouds();
-
     camera.end();
 	glDisable(GL_DEPTH_TEST);
 
+    gui.draw();
+
+    ofDrawBitmapString(ofToString(ofGetFrameRate()),2,10);
 }
 
 //--------------------------------------------------------------
