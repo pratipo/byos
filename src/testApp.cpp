@@ -153,13 +153,14 @@ void testApp::draw(){
 
     if(drawdepths){
         ofPushMatrix();
-            ofTranslate(0,640/4+20);
+            ofTranslate(0,640/2+10);
             ofRotateZ(-90);
-            kinects[0].drawDepth(2,40,640/4,480/4);
-            kinects[1].drawDepth(2,170,640/4,480/4);
-            kinects[2].drawDepth(2,300,640/4,480/4);
+            kinects[0].drawDepth(0,0,640/2,480/2);
+            kinects[1].drawDepth(0,250,640/2,480/2);
+            kinects[2].drawDepth(0,500,640/2,480/2);
         ofPopMatrix();
     }
+    else{
     glEnable(GL_DEPTH_TEST);
 	camera.begin();
         drawOrigin();
@@ -170,6 +171,7 @@ void testApp::draw(){
     gui.draw();
 
     ofDrawBitmapString(ofToString(ofGetFrameRate()),2,10);
+    }
 }
 
 //--------------------------------------------------------------
