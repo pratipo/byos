@@ -4,3 +4,4 @@ ofxGui
 ofxXmlSettings
 ofxThread
 ofxVectorMath
+ofxMidi

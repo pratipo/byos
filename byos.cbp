@@ -203,5 +203,44 @@
 		<Unit filename="../../../addons/ofxVectorMath/src/ofxVec4f.h">
 			<Option virtualFolder="addons/ofxVectorMath/src" />
 		</Unit>
+		<Unit filename="../../../addons/ofxMidi/src/ofxMidiIn.cpp">
+			<Option virtualFolder="addons/ofxMidi/src" />
+		</Unit>
+		<Unit filename="../../../addons/ofxMidi/src/ofxMidiMessage.h">
+			<Option virtualFolder="addons/ofxMidi/src" />
+		</Unit>
+		<Unit filename="../../../addons/ofxMidi/src/ofxMidiOut.h">
+			<Option virtualFolder="addons/ofxMidi/src" />
+		</Unit>
+		<Unit filename="../../../addons/ofxMidi/src/ofxMidi.h">
+			<Option virtualFolder="addons/ofxMidi/src" />
+		</Unit>
+		<Unit filename="../../../addons/ofxMidi/src/ofxMidiOut.cpp">
+			<Option virtualFolder="addons/ofxMidi/src" />
+		</Unit>
+		<Unit filename="../../../addons/ofxMidi/src/ofxMidiTypes.h">
+			<Option virtualFolder="addons/ofxMidi/src" />
+		</Unit>
+		<Unit filename="../../../addons/ofxMidi/src/rtmidi/RtMidi.cpp">
+			<Option virtualFolder="addons/ofxMidi/src/rtmidi" />
+		</Unit>
+		<Unit filename="../../../addons/ofxMidi/src/rtmidi/RtMidi.h">
+			<Option virtualFolder="addons/ofxMidi/src/rtmidi" />
+		</Unit>
+		<Unit filename="../../../addons/ofxMidi/src/rtmidi/readme">
+			<Option virtualFolder="addons/ofxMidi/src/rtmidi" />
+		</Unit>
+		<Unit filename="../../../addons/ofxMidi/src/rtmidi/RtError.h">
+			<Option virtualFolder="addons/ofxMidi/src/rtmidi" />
+		</Unit>
+		<Unit filename="../../../addons/ofxMidi/src/ofxMidiIn.h">
+			<Option virtualFolder="addons/ofxMidi/src" />
+		</Unit>
+		<Unit filename="../../../addons/ofxMidi/src/ofxMidiMessage.cpp">
+			<Option virtualFolder="addons/ofxMidi/src" />
+		</Unit>
+		<Unit filename="../../../addons/ofxMidi/src/ofxMidiConstants.h">
+			<Option virtualFolder="addons/ofxMidi/src" />
+		</Unit>
 	</Project>
 </CodeBlocks_project_file>

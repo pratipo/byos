@@ -1,25 +1,50 @@
 #include "testApp.h"
 
-void testApp::setUpKinects()
-{
+void testApp::setUpKinects(){
     for(int i = 0; i<nK; i++){
         kinects[i].init(false, false);
         kinects[i].open(kserials[i]); // open by serial number
     }
 }
 
-void testApp::setUpKinectClouds()
-{
+void testApp::setUpKinectClouds(){
     for(int i = 0; i<nK; i++){
         kinectClouds[i].init(i, &kinects[i], triangle_radius);
     }
 }
 
-void testApp::setup()
-{
+void testApp::setup(){
     ofSetLogLevel(OF_LOG_VERBOSE);
     ofSetVerticalSync(true);
+    ofEnableAlphaBlending();
+    ofBackground(0);
 
+    midiIn.listPorts(); // via instance
+
+	// open port by number (you may need to change this)
+	midiIn.openPort(1);
+	midiIn.ignoreTypes(false, false, false);
+	midiIn.addListener(this); // add testApp as a listener
+	midiIn.setVerbose(false);
+
+	//-------------------------------------------------
+    kserials[0] = "A00364911617035A"; //, "x", "y"};
+    kserials[1] = "A00365805405044A";
+    kserials[2] = "A00362803303039A";
+
+    kColors[0] = ofColor(255,0,0); kColors[1] = ofColor(0,200,55); kColors[2] = ofColor(255,255,0);
+
+    kHeights[0] = kHeights[1] = kHeights[2] = 740;
+    triangle_radius = 750; // RECOMMENDED 2100
+
+    cam_distance = 3000;
+    camera.setFarClip(10000);
+
+    loadXML("settings.xml");
+    setUpKinects();
+    setUpKinectClouds();
+    curK = 0;
+    //--------------------------------------------------
     gui.setup();
 
     gui.add(drawdepths.set("draw kinects depth",true));
@@ -32,36 +57,12 @@ void testApp::setup()
 
     resetTransformation.addListener(this,&testApp::resetTransf);
     resetClip.addListener(this,&testApp::resetClips);
-
-    curK = 0;
-
-    kserials[0] = "A00364911617035A"; //, "x", "y"};
-    kserials[1] = "A00365805405044A";
-    kserials[2] = "A00362803303039A";
-
-    kColors[0] = ofColor(255,0,0); kColors[1] = ofColor(0,200,55); kColors[2] = ofColor(255,255,0);
-    kHeights[0] = kHeights[1] = kHeights[2] = 740;
-
-    triangle_radius = 750; // RECOMMENDED 2100
-
-    ofBackground(0);
-    ofEnableAlphaBlending();
-
-    cam_distance = 3000;
-    camera.setFarClip(10000);
-
-    loadXML("settings.xml");
-
-    setUpKinects();
-    setUpKinectClouds();
 }
 
 //--------------------------------------------------------------
 
 void testApp::updateCamera(){
-
     float speed = 20.0;
-
     if (autorotation){
         cam_location = ofxVec3f(    sin(TWO_PI*ofGetElapsedTimef()/speed) * cam_distance,
                                     cos(TWO_PI*ofGetElapsedTimef()/speed) * cam_distance,
@@ -72,27 +73,22 @@ void testApp::updateCamera(){
                                     cos(4.0*PI*mouseX/ofGetWidth())*cos(1.0*PI*mouseY/ofGetHeight() - PI/2.0) * cam_distance,
                                     sin(1.0*PI*mouseY/ofGetHeight() - PI/2.0) * cam_distance); // z elevation
     }
-
     camera.resetTransform();
     camera.setPosition(cam_location);
     camera.lookAt(ofVec3f(0,0,1000), ofVec3f(0,0,1));
 }
 
-void testApp::resetTransf(bool& resetTransformation)
-{
+void testApp::resetTransf(bool& resetTransformation){
     kinectClouds[curK].resetTransf();
     resetTransformation = false;
 }
 
-void testApp::resetClips(bool& resetClip)
-{
+void testApp::resetClips(bool& resetClip){
     kinectClouds[curK].resetClips();
     resetClip = false;
 }
 
 void testApp::updateKinects(){
-
-    //int i = 0;
     for (int i=0; i<nK; i++){
         kinects[i].update();
 
@@ -103,25 +99,19 @@ void testApp::updateKinects(){
 }
 
 void testApp::updateKinectClouds(){
-
     for(int i = 0; i<nK; i++){
         kinectClouds[i].update();
     }
 }
 
 void testApp::update(){
-
     updateCamera();
-
     updateKinects();
-
 	updateKinectClouds();
 }
 
 //--------------------------------------------------------------
-
 void testApp::drawKinectClouds(){
-
     for(int i = 0; i<nK; i++){
         ofSetColor(kColors[i]);
         kinectClouds[i].draw();
@@ -129,28 +119,21 @@ void testApp::drawKinectClouds(){
 }
 
 void testApp::drawOrigin(){
-
     ofPushStyle();
-
-    ofNoFill();
-
-    ofDrawAxis(200);
-
-    ofSetColor(ofColor(255, 255, 255));
-    ofSetCircleResolution(6);
-    ofCircle(0,0,250);
-
-    /// TODO draw vertices according to corrected kinect position
-    ofSetCircleResolution(3);
-    ofCircle(0,0,triangle_radius);
-
+        ofNoFill();
+        ofDrawAxis(200);
+        ofSetColor(ofColor(255, 255, 255));
+        ofSetCircleResolution(6);
+        ofCircle(0,0,250);
+        /// TODO draw vertices according to corrected kinect position
+        ofSetCircleResolution(3);
+        ofCircle(0,0,triangle_radius);
     ofPopStyle();
 }
 
 //--------------------------------------------------------------
 void testApp::draw(){
     ofSetColor(255);
-
     if(drawdepths){
         ofPushMatrix();
             ofTranslate(0,640/4+20);
@@ -168,21 +151,17 @@ void testApp::draw(){
 	glDisable(GL_DEPTH_TEST);
 
     gui.draw();
-
     ofDrawBitmapString(ofToString(ofGetFrameRate()),2,10);
 }
 
 //--------------------------------------------------------------
-
-void testApp::saveClouds()
-{
+void testApp::saveClouds(){
     for(int i = 0; i<nK; i++){
         kinectClouds[i].mesh.save(ofGetTimestampString()+"i"+".ply");
     }
 }
 
-void testApp::exportAsc()
-{
+void testApp::exportAsc(){
     ostringstream filename;
     ofstream export_file;
 
@@ -198,7 +177,7 @@ void testApp::exportAsc()
 
     filename << pathname.str() << timestamp << "_" << nom << ".asc" ;
 
-//    /// SHUTTER
+    /// TODO: VIBRATORS
 //    serial.writeByte('H');
 //    ofSleepMillis(500);
 
@@ -214,14 +193,12 @@ void testApp::exportAsc()
 
 
 void testApp::loadXML(string file){
-
     if( XML.loadFile(file) )
 		cout << "settings.xml loaded!" << endl;
     else
         cout << "settings.xml NOT loaded!" << endl;
 
-    cam_distance = XML.getValue("DISTANCE", 3000); //* 400
-
+    cam_distance = XML.getValue("DISTANCE", 3000);
     for (int k=0; k<nK; k++){
         std::ostringstream s;
 
@@ -247,7 +224,6 @@ void testApp::loadXML(string file){
 }
 
 void testApp::updateXML(){
-
     XML.setValue("DISTANCE", cam_distance);
 
     for (int k=0; k<nK; k++){
@@ -271,10 +247,147 @@ void testApp::updateXML(){
         XML.setValue( s.str(), kinectClouds[k].ZClip );
         s.str("");
     }
-
     XML.saveFile("settings.xml");
     cout << "settings.xml saved !" << endl;
 }
+
+//--------------------------------------------------------------
+
+void testApp::newMidiMessage(ofxMidiMessage& msg) {
+    //cout   << msg.toString() << endl;
+    cout << " midi >> control:" << msg. control << " value:" << msg.value << " delta:" << msg.deltatime << endl;
+
+/*
+    switch (msg.byteOne) {
+
+	    //AUTOROTATE
+	    case 49:
+            if(args.byteTwo==0) autoRotate = !autoRotate;
+            break;
+        //CAPTURE
+        case 44:
+            if(args.byteTwo==0) doExport = true;
+            break;
+        //LAYER 1 KNOB 1
+        case 14:
+            increment =l1k1-p;
+            if(abs(increment)>2) {
+                factor = 4;
+            }else{
+                factor = 0.1;
+            }
+            if (increment>0) factor*=-1;
+
+                    //TEST
+
+//                    clouds[kindex]->model.glRotate(-90.0, 0.0, 0.0, 1.0);
+//                    clouds[kindex]->model.glTranslate(0.0, 0.0, 2); //* -800/400
+//                    clouds[kindex]->model.glRotate(-120.0*kindex, 0.0, 1.0, 0.0);
+
+
+                        clouds[kindex]->model.rotate(factor, 1.0, 0.0, 0.0);
+
+//                    clouds[kindex]->model.glRotate(120.0*kindex, 0.0, 1.0, 0.0);
+//                    clouds[kindex]->model.glTranslate(0.0, 0.0, -2); //* -800/400
+//                    clouds[kindex]->model.glRotate(90.0, 0.0, 0.0, 1.0);
+
+            l1k1=p;
+            break;
+        //LAYER 1 KNOB 2
+        case 15:
+            increment =l1k2-p;
+            if(abs(increment)>2) {
+                factor = 4;
+            }else{
+                factor = 0.1;
+            }
+            if (increment>0) factor*=-1;
+            clouds[kindex]->model.rotate(factor, 0.0, 1.0, 0.0);
+            l1k2=p;
+            break;
+        //LAYER 1 KNOB 3
+        case 16:
+            increment =l1k3-p;
+            if(abs(increment)>2) {
+                factor = 4;
+            }else{
+                factor = 0.1;
+            }
+            if (increment>0) factor*=-1;
+            clouds[kindex]->model.rotate(factor, 0.0, 0.0, 1.0);
+            l1k3=p;
+            break;
+
+        //LAYER 1 SLIDER 1  X TRANSLATION
+        case 2:
+            increment =l1s1-p;
+            if(abs(increment)>2) {
+                factor = 2;
+            }else{
+                factor = .2;
+            }
+            if (increment>0) factor*=-1;
+            clouds[kindex]->model.translate(factor, 0.0, 0.0);
+            l1s1=p;
+            break;
+
+        //LAYER 1 SLIDER 2 Y TRANSLATION
+        case 3:
+            increment =l1s2-p;
+            if(abs(increment)>2) {
+                factor = 2;
+            }else{
+                factor = .2;
+            }
+            if (increment>0) factor*=-1;
+            clouds[kindex]->model.translate(0.0, factor, 0.0);
+            l1s2=p;
+            break;
+        //LAYER 1 SLIDER 3 Z TRANSLATION
+        case 4:
+            increment =l1s3-p;
+            if(abs(increment)>2) {
+                factor = 2;
+            }else{
+                factor = .2;
+            }
+            if (increment>0) factor*=-1;
+            clouds[kindex]->model.translate(0.0, 0.0, factor);
+            l1s3=p;
+            break;
+
+        ///-----------------------------------------------------
+        //LAYER 1 SLIDER 4 SCALE
+//        case 5:
+//            fincrement =l1s4-p;
+//            if(p > 127/2+127/6 || p < 127/2-127/6){
+//                clouds[kindex]->model.scale(1.02, 1.02, factor);
+//
+//            break;
+        ///-----------------------------------------------------
+
+        //LAYER 1 SLIDER 8 DISTANCE
+        case 12:
+            increment =l1s8-p;
+            if(abs(increment)>4) {
+                factor = 50;
+            }else{
+                factor = 5;
+            }
+            if (increment>0) factor*=-1;
+            distance += factor;
+            l1s8=p;
+            break;
+
+        //LAYER 1 SLIDER 9 FOV
+        case 13:
+            fov = (float)args.byteTwo*0.5+30.0 ;
+            needsUpdateProjection=true;
+            break;
+	}
+	*/
+}
+
 
 //--------------------------------------------------------------
 void testApp::keyPressed(int key){

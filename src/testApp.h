@@ -1,20 +1,15 @@
 #pragma once
 
-/*
-#include <time.h>
-#include <vector>
-#include <string>
-*/
-
 #include "ofMain.h"
 #include "ofxGui.h"
+#include "ofxMidi.h"
 #include "ofxKinect.h"
 #include "ofxPCL.h"
 #include "ofxVectorMath.h"
 
 #include "kinectCloud.h"
 
-class testApp : public ofBaseApp{
+class testApp : public ofBaseApp , public ofxMidiListener {
 
 	public:
         ofxXmlSettings          XML;
@@ -79,4 +74,10 @@ class testApp : public ofBaseApp{
 		void windowResized(int w, int h);
 		void dragEvent(ofDragInfo dragInfo);
 		void gotMessage(ofMessage msg);
+
+		//------------------------------------
+        void newMidiMessage(ofxMidiMessage& eventArgs);
+
+        ofxMidiIn midiIn;
+        ofxMidiMessage midiMessage;
 };
