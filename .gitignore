@@ -13,3 +13,7 @@ build/
 *.la
 *.a
 
+*~
+
+/bin
+/obj

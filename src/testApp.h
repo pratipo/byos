@@ -60,8 +60,9 @@ class testApp : public ofBaseApp , public ofxMidiListener {
 
         void draw();
         //------------------------------------
+        bool exportAsc;
         void saveClouds();
-        void exportAsc();
+        void exportToAsc();
 
         void exit();
         //------------------------------------

@@ -57,6 +57,8 @@ void testApp::setup(){
 
     resetTransformation.addListener(this,&testApp::resetTransf);
     resetClip.addListener(this,&testApp::resetClips);
+
+    exportAsc = false;
 }
 
 //--------------------------------------------------------------
@@ -108,6 +110,11 @@ void testApp::update(){
     updateCamera();
     updateKinects();
 	updateKinectClouds();
+
+	if (exportAsc){
+        exportToAsc();
+        exportAsc = false;
+	}
 }
 
 //--------------------------------------------------------------
@@ -161,7 +168,7 @@ void testApp::saveClouds(){
     }
 }
 
-void testApp::exportAsc(){
+void testApp::exportToAsc(){
     ostringstream filename;
     ofstream export_file;
 
@@ -256,6 +263,37 @@ void testApp::updateXML(){
 void testApp::newMidiMessage(ofxMidiMessage& msg) {
     //cout   << msg.toString() << endl;
     cout << " midi >> control:" << msg. control << " value:" << msg.value << " delta:" << msg.deltatime << endl;
+    int value = (msg.value);
+    int change = 0;
+
+    switch (msg.control){
+        case 49:
+            if (value) autorotation = !autorotation;
+            break;
+        case 44:
+            if(value) exportAsc = true;
+            break;
+
+        // translation
+        case 2:
+            kinectClouds[curK].posX -= value;
+            break;
+        case 3:
+            kinectClouds[curK].posY -= 10;
+            break;
+        case 4:
+            kinectClouds[curK].posZ += 10;
+            break;
+
+        // rotation
+
+        // scale?
+
+        // camera distance to origin
+
+        // FOV
+
+    }
 
 /*
     switch (msg.byteOne) {
@@ -396,7 +434,7 @@ void testApp::keyPressed(int key){
 
     switch (key){
         case 'z':
-            exportAsc();
+            exportAsc = true;
             break;
         case 'x':
             autorotation = !autorotation;
