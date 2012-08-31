@@ -16,6 +16,7 @@ class testApp : public ofBaseApp , public ofxMidiListener {
         void loadXML(string file);
         void updateXML();
         //------------------------------------
+        bool showgui;
         ofxPanel gui;
 
         ofxParameter<bool> drawdepths;

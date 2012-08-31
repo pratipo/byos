@@ -45,6 +45,7 @@ void testApp::setup(){
     setUpKinectClouds();
     curK = 0;
     //--------------------------------------------------
+    showgui = true;
     gui.setup();
 
     gui.add(drawdepths.set("draw kinects depth",true));
@@ -151,16 +152,16 @@ void testApp::draw(){
         ofPopMatrix();
     }
     else{
-    glEnable(GL_DEPTH_TEST);
-	camera.begin();
-        drawOrigin();
-        drawKinectClouds();
-    camera.end();
-	glDisable(GL_DEPTH_TEST);
-
-    gui.draw();
-    ofDrawBitmapString(ofToString(ofGetFrameRate()),2,10);
+        glEnable(GL_DEPTH_TEST);
+        camera.begin();
+            drawOrigin();
+            drawKinectClouds();
+        camera.end();
+        glDisable(GL_DEPTH_TEST);
     }
+    if(showgui)
+        gui.draw();
+    ofDrawBitmapString(ofToString(ofGetFrameRate()),2,10);
 }
 
 //--------------------------------------------------------------
@@ -435,6 +436,10 @@ void testApp::keyPressed(int key){
     kinectClouds[0].selected = kinectClouds[1].selected = kinectClouds[2].selected = false;
 
     switch (key){
+        case '<':
+            showgui = !showgui;
+            break;
+
         case 'z':
             exportAsc = true;
             break;
@@ -443,6 +448,9 @@ void testApp::keyPressed(int key){
             break;
         case 'c':
             clips = !clips;
+            break;
+        case 'v':
+            drawdepths = !drawdepths;
             break;
 
         case '+':
