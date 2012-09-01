@@ -2,7 +2,7 @@
 
 kinectCloud::kinectCloud(){ }
 
-void kinectCloud::init(int i, ofxKinect* k, int dist)
+void kinectCloud::init(int i, ofxKinect* k, int dcenter, int dfloor)
 {
     id = i;
     kinect = k; // pointer to assigned kinect device
@@ -11,8 +11,11 @@ void kinectCloud::init(int i, ofxKinect* k, int dist)
     w = 640/step;
     h = 480/step;
 
-    dist_to_center = dist;
-    clips = true;
+    dist_to_center = dcenter;
+    dist_to_floor = dfloor;
+    useclips = true;
+
+    scaleXYZ = 1.0;
     posX = posY = posZ = 0.0;
     rotX  = rotY = rotZ = 0.0;
 
@@ -44,10 +47,15 @@ void kinectCloud::meshCloud()
 			if(kinect->getDistanceAt(x, y) > 0) {
                 ofVec3f o = kinect->getWorldCoordinateAt(x, y);
                 ofVec3f p = ofVec3f(o.z,-o.y,o.x);
-				if( (p.x > xClip) && (p.x < XClip) &&
-                    (p.y > yClip) && (p.y < YClip) &&
-                    (p.z > zClip) && (p.z < ZClip)   )
-                    mesh.addVertex(p);
+				if(useclips){
+                    if( (p.x > xClip) && (p.x < XClip) &&
+                        (p.y > yClip) && (p.y < YClip) &&
+                        (p.z > zClip) && (p.z < ZClip)   )
+                        mesh.addVertex(p);
+                }
+                else{
+                        mesh.addVertex(p);
+                }
 			}
 		}
 	}
@@ -57,7 +65,7 @@ void kinectCloud::update()
 {
     this->resetTransform();
 
-    //this->setScale(1,-1,1);
+    this->setScale(scaleXYZ);
 
     this->rotate(0.0                + rotX,  1.0,0.0,0.0); // x
     this->rotate(0.0                + rotY,  0.0,1.0,0.0); // y
@@ -65,7 +73,7 @@ void kinectCloud::update()
 
     this->move (dist_to_center * cos(TWO_PI*(float)id/nK),
                  dist_to_center * sin(TWO_PI*(float)id/nK),
-                 740                            ); // kHeights[i]
+                 dist_to_floor                           ); // kHeights[i]
 
     this->dolly(posZ);
     this->truck(posX);
@@ -101,7 +109,7 @@ void kinectCloud::customDraw()
     ofDrawAxis(200);
     ofCircle(0,0,50);
 
-    if (clips)
+    if (useclips)
         drawClips();
 
     if (selected)

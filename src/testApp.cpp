@@ -9,7 +9,8 @@ void testApp::setUpKinects(){
 
 void testApp::setUpKinectClouds(){
     for(int i = 0; i<nK; i++){
-        kinectClouds[i].init(i, &kinects[i], triangle_radius);
+        kinectClouds[i].init(i, &kinects[i], triangle_radius, kHeights[i]);
+        kinectClouds[i].useclips = clips;
     }
 }
 
@@ -36,8 +37,9 @@ void testApp::setup(){
 
     kColors[0] = ofColor(255,0,0); kColors[1] = ofColor(0,200,55); kColors[2] = ofColor(255,255,0);
 
-    kHeights[0] = kHeights[1] = kHeights[2] = 740;
-    triangle_radius = 750; // RECOMMENDED 2100
+    kHeights[0] = kHeights[1] = kHeights[2] = 1130;
+    triangle_radius = 1500; // RECOMMENDED 2100
+    clips = true;
 
     cam_distance = 3000;
     camera.setFarClip(10000);
@@ -131,13 +133,17 @@ void testApp::drawKinectClouds(){
 void testApp::drawOrigin(){
     ofPushStyle();
         ofNoFill();
-        ofDrawAxis(200);
         ofSetColor(ofColor(255, 255, 255));
-        ofSetCircleResolution(6);
-        ofCircle(0,0,250);
-        /// TODO draw vertices according to corrected kinect position
+        ofPushMatrix();
+            ofTranslate(0,0,370);
+            ofDrawAxis(200);
+            ofSetCircleResolution(6);
+            ofCircle(0,0,250);
+        ofPopMatrix();
         ofSetCircleResolution(3);
         ofCircle(0,0,triangle_radius);
+        for(int i=1; i<11;i++)
+            ofCircle(0,0,triangle_radius+500*i);
     ofPopStyle();
 }
 
@@ -214,6 +220,29 @@ void testApp::loadXML(string file){
     for (int k=0; k<nK; k++){
         std::ostringstream s;
 
+        s << "MODEL" << k << ":XPOS";
+        kinectClouds[k].posX = XML.getValue(s.str(), 0.0);
+        s.str("");
+        s << "MODEL" << k << ":YPOS";
+        kinectClouds[k].posY = XML.getValue(s.str(), 0.0);
+        s.str("");
+        s << "MODEL" << k << ":ZPOS";
+        kinectClouds[k].posZ = XML.getValue(s.str(), 0.0);
+        s.str("");
+        s << "MODEL" << k << ":XROT";
+        kinectClouds[k].rotX = XML.getValue(s.str(), 0.0);
+        s.str("");
+        s << "MODEL" << k << ":YROT";
+        kinectClouds[k].rotY = XML.getValue(s.str(), 0.0);
+        s.str("");
+        s << "MODEL" << k << ":ZROT";
+        kinectClouds[k].rotZ = XML.getValue(s.str(), 0.0);
+        s.str("");
+
+        s << "MODEL" << k << ":SCALE";
+        kinectClouds[k].scaleXYZ = XML.getValue(s.str(), 0.0);
+        s.str("");
+
         s << "MODEL" << k << ":XCLIP";
         kinectClouds[k].xClip = XML.getValue(s.str(), 0.0);
         s.str("");
@@ -240,6 +269,30 @@ void testApp::updateXML(){
 
     for (int k=0; k<nK; k++){
         std::ostringstream s;
+
+        s << "MODEL" << k << ":XPOS";
+        XML.setValue( s.str(), kinectClouds[k].posX );
+        s.str("");
+        s << "MODEL" << k << ":YPOS";
+        XML.setValue( s.str(), kinectClouds[k].posY );
+        s.str("");
+        s << "MODEL" << k << ":ZPOS";
+        XML.setValue( s.str(), kinectClouds[k].posZ );
+        s.str("");
+        s << "MODEL" << k << ":XROT";
+        XML.setValue( s.str(), kinectClouds[k].rotX );
+        s.str("");
+        s << "MODEL" << k << ":YROT";
+        XML.setValue( s.str(), kinectClouds[k].rotY );
+        s.str("");
+        s << "MODEL" << k << ":ZROT";
+        XML.setValue( s.str(), kinectClouds[k].rotZ );
+        s.str("");
+
+        s << "MODEL" << k << ":SCALE";
+        XML.setValue( s.str(), kinectClouds[k].scaleXYZ );
+        s.str("");
+
         s << "MODEL" << k << ":XCLIP";
         XML.setValue( s.str(), kinectClouds[k].xClip );
         s.str("");
@@ -494,6 +547,13 @@ void testApp::keyPressed(int key){
             curK = 2;
             break;
 
+     case 'u':
+            kinectClouds[curK].scaleXYZ += 0.02;
+            break;
+        case 'j':
+            kinectClouds[curK].scaleXYZ -= 0.02;
+            break;
+
         case 's':
             kinectClouds[curK].posX -= 10;
             break;
@@ -629,6 +689,6 @@ void testApp::dragEvent(ofDragInfo dragInfo){
 void testApp::clipsChanged(bool & clips)
 {
     for(int i = 0; i<nK; i++){
-        kinectClouds[i].clips = clips;
+        kinectClouds[i].useclips = clips;
     }
 }
