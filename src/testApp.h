@@ -82,4 +82,8 @@ class testApp : public ofBaseApp , public ofxMidiListener {
 
         ofxMidiIn midiIn;
         ofxMidiMessage midiMessage;
+
+        bool bypassmidi;
+
+        int slider1,slider2,slider3;
 };

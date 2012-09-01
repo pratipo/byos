@@ -27,6 +27,8 @@ void testApp::setup(){
 	midiIn.addListener(this); // add testApp as a listener
 	midiIn.setVerbose(false);
 
+    bypassmidi = false;
+    slider1=slider2=slider3=0;
 	//-------------------------------------------------
     kserials[0] = "A00364911617035A"; //, "x", "y"};
     kserials[1] = "A00365805405044A";
@@ -265,11 +267,31 @@ void testApp::updateXML(){
 
 void testApp::newMidiMessage(ofxMidiMessage& msg) {
     //cout   << msg.toString() << endl;
-    cout << " midi >> control:" << msg. control << " value:" << msg.value << " delta:" << msg.deltatime << endl;
-    int value = (msg.value);
+    int control = msg.control;
+    int value = msg.value;
+    cout << " midi >> control:" << control << " value:" << value << " delta:" << msg.deltatime << endl;
+
     int change = 0;
 
-    switch (msg.control){
+    if (control==46)
+        (value>0)? (bypassmidi=true) : (bypassmidi=false);
+
+    if (!bypassmidi)
+    switch (control){
+        // translation
+        case 2:
+            kinectClouds[curK].posX += value - slider1;
+            break;
+        case 3:
+            kinectClouds[curK].posY += value - slider2;
+            break;
+        case 4:
+            kinectClouds[curK].posZ += value - slider3;
+            break;
+    }
+
+
+    switch (control){
         case 49:
             if (value) autorotation = !autorotation;
             break;
@@ -279,13 +301,13 @@ void testApp::newMidiMessage(ofxMidiMessage& msg) {
 
         // translation
         case 2:
-            kinectClouds[curK].posX -= value;
+            slider1 = value;
             break;
         case 3:
-            kinectClouds[curK].posY -= 10;
+            slider2 = value;
             break;
         case 4:
-            kinectClouds[curK].posZ += 10;
+            slider3 = value;
             break;
 
         // rotation
@@ -297,6 +319,8 @@ void testApp::newMidiMessage(ofxMidiMessage& msg) {
         // FOV
 
     }
+
+
 
 /*
     switch (msg.byteOne) {
