@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <CodeBlocks_layout_file>
 	<ActiveTarget name="Debug" />
-
 	<File name="../../../addons/ofxKinect/src/ofxKinect.cpp" open="0" top="0" tabpos="0">
 		<Cursor position="7663" topLine="286" />
 	</File>
@@ -21,18 +20,18 @@
 		<Cursor position="758" topLine="0" />
 	</File>
 	<File name="src/kinectCloud.cpp" open="1" top="0" tabpos="4">
-		<Cursor position="842" topLine="15" />
+		<Cursor position="680" topLine="0" />
 	</File>
 	<File name="src/kinectCloud.h" open="1" top="0" tabpos="3">
-		<Cursor position="1234" topLine="19" />
+		<Cursor position="220" topLine="41" />
 	</File>
 	<File name="src/main.cpp" open="0" top="0" tabpos="0">
 		<Cursor position="384" topLine="0" />
 	</File>
 	<File name="src/testApp.cpp" open="1" top="1" tabpos="2">
-		<Cursor position="7469" topLine="257" />
+		<Cursor position="6269" topLine="209" />
 	</File>
-	<File name="src/testApp.h" open="1" top="1" tabpos="1">
-		<Cursor position="408" topLine="55" />
+	<File name="src/testApp.h" open="1" top="0" tabpos="1">
+		<Cursor position="1935" topLine="24" />
 	</File>
 </CodeBlocks_layout_file>

@@ -7,9 +7,9 @@ void kinectCloud::init(int i, ofxKinect* k, int dcenter, int dfloor)
     id = i;
     kinect = k; // pointer to assigned kinect device
 
-    step = 1;
-    w = 640/step;
-    h = 480/step;
+    step = 2;
+    w = 640;
+    h = 480;
 
     dist_to_center = dcenter;
     dist_to_floor = dfloor;
@@ -73,7 +73,7 @@ void kinectCloud::update()
 
     this->move (dist_to_center * cos(TWO_PI*(float)id/nK),
                  dist_to_center * sin(TWO_PI*(float)id/nK),
-                 dist_to_floor                           ); // kHeights[i]
+                 dist_to_floor                            ); // kHeights[i]
 
     this->dolly(posZ);
     this->truck(posX);

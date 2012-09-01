@@ -35,6 +35,7 @@ class testApp : public ofBaseApp , public ofxMidiListener {
         int kHeights[3];
 		ofxKinect kinects[3];
 		kinectCloud kinectClouds[3];
+		int downsampling_step;
 		int triangle_radius;
 
 		void setUpKinects();
@@ -86,4 +87,6 @@ class testApp : public ofBaseApp , public ofxMidiListener {
         bool bypassmidi;
 
         int slider1,slider2,slider3;
+        //------------------------------------
+        ofSerial serial;
 };

@@ -10,6 +10,7 @@ void testApp::setUpKinects(){
 void testApp::setUpKinectClouds(){
     for(int i = 0; i<nK; i++){
         kinectClouds[i].init(i, &kinects[i], triangle_radius, kHeights[i]);
+        kinectClouds[i].step = downsampling_step;
         kinectClouds[i].useclips = clips;
     }
 }
@@ -38,15 +39,16 @@ void testApp::setup(){
     kColors[0] = ofColor(255,0,0); kColors[1] = ofColor(0,200,55); kColors[2] = ofColor(255,255,0);
 
     kHeights[0] = kHeights[1] = kHeights[2] = 1130;
-    triangle_radius = 1500; // RECOMMENDED 2100
+    downsampling_step = 2;
+    triangle_radius = 2100; // RECOMMENDED 2100
     clips = true;
 
     cam_distance = 3000;
     camera.setFarClip(10000);
 
-    loadXML("settings.xml");
     setUpKinects();
     setUpKinectClouds();
+    loadXML("settings.xml");
     curK = 0;
     //--------------------------------------------------
     showgui = true;
@@ -64,6 +66,12 @@ void testApp::setup(){
     resetClip.addListener(this,&testApp::resetClips);
 
     exportAsc = false;
+
+    ofSerial serial;
+    if( serial.setup() )
+        cout << "serial is setup!" << endl;
+    else
+        cout << "error setting up serial" << endl;
 }
 
 //--------------------------------------------------------------
@@ -117,6 +125,9 @@ void testApp::update(){
 	updateKinectClouds();
 
 	if (exportAsc){
+        unsigned char myByte = 1;
+        serial.writeByte(myByte);
+        ofSleepMillis(1000);
         exportToAsc();
         exportAsc = false;
 	}
@@ -530,6 +541,16 @@ void testApp::keyPressed(int key){
             drawdepths = !drawdepths;
             break;
 
+        case '.':
+            downsampling_step--;
+            if(downsampling_step<1) downsampling_step=1;
+
+            break;
+        case ',':
+            downsampling_step++;
+            if(downsampling_step>3) downsampling_step=3;
+            break;
+
         case '+':
             cam_distance -= 100;
             break;
@@ -636,6 +657,8 @@ void testApp::keyPressed(int key){
     }
 
     kinectClouds[curK].selected = true;
+
+     kinectClouds[0].step = kinectClouds[1].step = kinectClouds[2].step = downsampling_step;
 
 }
 
